@@ -13,6 +13,7 @@ import {
   relativeInfoData,
   media,
 } from "../../data/siteContent";
+import { marathiContent } from "../../data/marathiContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 const escapeHtml = (value: string) =>
@@ -38,6 +39,36 @@ export default function PDFDownload() {
         ? "'Noto Sans Devanagari', 'Noto Sans', Arial, sans-serif"
         : "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
+      const occupationLabel = (occupation: string | null) => {
+        if (!occupation) return "";
+        if (!isMarathi) return occupation;
+        return {
+          Farmer: "शेतकरी",
+          Homemaker: "गृहिणी",
+          "Software Engineer": "सॉफ्टवेअर अभियंता",
+        }[occupation] ?? occupation;
+      };
+
+      const relativeLabel = (relation: string) => {
+        if (!isMarathi) return relation;
+        const relationMap: Record<string, string> = {
+          Father: roles.father,
+          Mother: roles.mother,
+          Sister: roles.sister,
+          "Paternal Grandfather": roles.paternalGrandfather,
+          "Paternal Grandmother": roles.paternalGrandmother,
+          "Maternal Grandfather": roles.maternalGrandfather,
+          "Maternal Grandmother": roles.maternalGrandmother,
+        };
+        return relationMap[relation] ?? relation;
+      };
+
+      const localizedEducation = isMarathi ? marathiContent.education : educationData;
+      const localizedCareer = isMarathi ? marathiContent.career.jobs : careerData;
+      const localizedAchievements = isMarathi ? marathiContent.achievements : achievementsData;
+      const profile = isMarathi ? marathiContent.profile : personalInfo;
+      const localizedHoroscope = isMarathi ? marathiContent.horoscope : horoscopeData;
+
       const mkRow = (label: string, value: string) =>
         `<tr>
           <td style="padding:8px 14px;color:#9CA3AF;font-size:12px;white-space:nowrap;width:160px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;">${escapeHtml(label)}</td>
@@ -53,28 +84,40 @@ export default function PDFDownload() {
           <table style="width:100%;border-collapse:collapse;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;">${rows}</table>
         </div>`;
 
-      const familyRows = [
-        mkRow(roles.father, `${familyInfo.father.name} · ${familyInfo.father.occupation}`),
-        mkRow(roles.mother, `${familyInfo.mother.name} · ${familyInfo.mother.occupation}`),
-        ...familyInfo.siblings.map((sibling) =>
-          mkRow(roles.sister, `${sibling.name} · ${sibling.occupation}`)
-        ),
-        mkRow(roles.paternalGrandfather, familyInfo.paternal.grandfather),
-        mkRow(roles.paternalGrandmother, familyInfo.paternal.grandmother),
-        mkRow(roles.maternalGrandfather, familyInfo.maternal.grandfather),
-        mkRow(roles.maternalGrandmother, familyInfo.maternal.grandmother),
-      ].join("");
+      const familyRows = isMarathi
+        ? [
+            mkRow(roles.father, `${marathiContent.family.father.name} · ${marathiContent.family.father.occupation}`),
+            mkRow(roles.mother, `${marathiContent.family.mother.name} · ${marathiContent.family.mother.occupation}`),
+            mkRow(roles.sister, `${marathiContent.family.sister.name} · ${marathiContent.family.sister.occupation}`),
+            mkRow(roles.paternalGrandfather, marathiContent.family.paternal.grandfather),
+            mkRow(roles.paternalGrandmother, marathiContent.family.paternal.grandmother),
+            mkRow(roles.maternalGrandfather, marathiContent.family.maternal.grandfather),
+            mkRow(roles.maternalGrandmother, marathiContent.family.maternal.grandmother),
+          ].join("")
+        : [
+            mkRow(roles.father, `${familyInfo.father.name} · ${occupationLabel(familyInfo.father.occupation)}`),
+            mkRow(roles.mother, `${familyInfo.mother.name} · ${occupationLabel(familyInfo.mother.occupation)}`),
+            ...familyInfo.siblings.map((sibling) =>
+              mkRow(roles.sister, `${sibling.name} · ${occupationLabel(sibling.occupation)}`)
+            ),
+            mkRow(roles.paternalGrandfather, familyInfo.paternal.grandfather),
+            mkRow(roles.paternalGrandmother, familyInfo.paternal.grandmother),
+            mkRow(roles.maternalGrandfather, familyInfo.maternal.grandfather),
+            mkRow(roles.maternalGrandmother, familyInfo.maternal.grandmother),
+          ].join("");
 
-      const relativeRows = relativeInfoData
-        .map(({ name, relation, occupation }) =>
-          mkRow(
-            relation,
-            `${name}${occupation ? ` · ${occupation}` : ""}`
-          )
-        )
-        .join("");
+      const relativeRows = isMarathi
+        ? marathiContent.family.relativeItems.map((item) => mkRow("", item)).join("")
+        : relativeInfoData
+            .map(({ name, relation, occupation }) =>
+              mkRow(
+                relativeLabel(relation),
+                `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`
+              )
+            )
+            .join("");
 
-      const educationRows = educationData
+      const educationRows = localizedEducation
         .map((item) =>
           mkRow(
             item.year,
@@ -83,16 +126,16 @@ export default function PDFDownload() {
         )
         .join("");
 
-      const careerRows = careerData
-        .map((item) =>
+      const careerRows = localizedCareer
+        .map((job, i) =>
           mkRow(
-            item.year,
-            `${item.company} · ${item.role} · ${item.location}`
+            job.year,
+            `${job.company} · ${job.role} · ${job.location}${job.description ? ` · ${job.description}` : ""}`
           )
         )
         .join("");
 
-      const achievementRows = achievementsData
+      const achievementRows = localizedAchievements
         .map((item) =>
           mkRow(item.year, `${item.title} · ${item.fullTitle} · ${item.issuer}`)
         )
@@ -100,23 +143,23 @@ export default function PDFDownload() {
 
       const html = `<div style="background:#0B1120;font-family:${fontFamily};color:white;width:794px;">
           <div style="background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%);padding:36px 28px 28px;text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${escapeHtml(personalInfo.fullName)}</div>
-            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(personalInfo.tagline)}</div>
+            <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${escapeHtml(profile.fullName)}</div>
+            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(t.hero.tagline)}</div>
             <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:20px;font-size:10px;color:#BFDBFE;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.marriageBiodata)}</div>
           </div>
           <div style="padding:28px 0 8px;">
             ${mkSection(
               s.personalInfo,
               [
-                mkRow(s.fullName, personalInfo.fullName),
-                mkRow(s.dateOfBirth, personalInfo.dateOfBirth),
-                mkRow(s.age, String(personalInfo.age)),
-                mkRow(s.height, personalInfo.height),
-                mkRow(s.bloodGroup, personalInfo.bloodGroup),
-                mkRow(s.nativePlace, personalInfo.nativePlace),
-                mkRow(s.currentCity, personalInfo.currentCity),
-                mkRow(s.religion, `${personalInfo.religion} · ${personalInfo.caste}`),
-                mkRow(s.rashi, personalInfo.rashi),
+                mkRow(s.fullName, profile.fullName),
+                mkRow(s.dateOfBirth, profile.dateOfBirth),
+                mkRow(s.age, String(profile.age)),
+                mkRow(s.height, profile.height),
+                mkRow(s.bloodGroup, profile.bloodGroup),
+                mkRow(s.nativePlace, profile.nativePlace),
+                mkRow(s.currentCity, profile.currentCity),
+                mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
+                mkRow(s.rashi, profile.rashi),
               ].join("")
             )}
             ${mkSection(s.familyDetails, familyRows)}
@@ -126,7 +169,7 @@ export default function PDFDownload() {
               mkRow(s.phone, personalInfo.phone),
               mkRow(s.email, personalInfo.email),
               mkRow(s.linkedin, personalInfo.linkedin),
-              mkRow(s.address, personalInfo.address),
+              mkRow(s.address, profile.address),
             ].join(""))}
             ${mkSection(
               s.relativeDetails,
@@ -136,9 +179,9 @@ export default function PDFDownload() {
             ${mkSection(
               s.horoscope,
               [
-                mkRow(s.rashi, horoscopeData.rashi),
-                mkRow(s.timeOfBirth, horoscopeData.tob),
-                mkRow(s.placeOfBirth, horoscopeData.pob),
+                mkRow(s.rashi, isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi),
+                mkRow(s.timeOfBirth, localizedHoroscope.tob),
+                mkRow(s.placeOfBirth, localizedHoroscope.pob),
               ].join("")
             )}
 
@@ -149,7 +192,7 @@ export default function PDFDownload() {
               </div>
               <div style="display:flex;gap:16px;align-items:stretch;">
                 <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
-                  <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.groom)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:240px;object-fit:cover;border-radius:8px;" />
+                  <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:240px;object-fit:cover;border-radius:8px;" />
                   <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.groomPhoto)}</div>
                 </div>
                 <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
@@ -215,7 +258,7 @@ export default function PDFDownload() {
         }
       }
 
-      doc.save(`${personalInfo.shortName}_Biodata.pdf`);
+      doc.save(`${profile.shortName}_Biodata.pdf`);
       setDone(true);
       setTimeout(() => setDone(false), 3000);
     } finally {

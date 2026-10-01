@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { familyInfo, personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 const connections = [
   ["pgf", "father"],
@@ -14,13 +15,14 @@ const connections = [
 ];
 
 export default function FamilyTree() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const family = isMarathi ? marathiContent.family : null;
   const r = t.familyTree.roles;
 
   const nodes = [
     {
       id: "pgf",
-      name: familyInfo.paternal.grandfather,
+      name: family?.paternal.grandfather ?? familyInfo.paternal.grandfather,
       role: r.paternalGrandfather,
       level: 0,
       col: 0,
@@ -28,7 +30,7 @@ export default function FamilyTree() {
     },
     {
       id: "pgm",
-      name: familyInfo.paternal.grandmother,
+      name: family?.paternal.grandmother ?? familyInfo.paternal.grandmother,
       role: r.paternalGrandmother,
       level: 0,
       col: 1,
@@ -36,7 +38,7 @@ export default function FamilyTree() {
     },
     {
       id: "father",
-      name: familyInfo.father.name,
+      name: family?.father.name ?? familyInfo.father.name,
       role: r.father,
       level: 1,
       col: 1,
@@ -44,7 +46,7 @@ export default function FamilyTree() {
     },
     {
       id: "mother",
-      name: familyInfo.mother.name,
+      name: family?.mother.name ?? familyInfo.mother.name,
       role: r.mother,
       level: 1,
       col: 3,
@@ -52,7 +54,7 @@ export default function FamilyTree() {
     },
     {
       id: "groom",
-      name: personalInfo.fullName,
+      name: isMarathi ? marathiContent.profile.fullName : personalInfo.fullName,
       role: r.groom,
       level: 2,
       col: 2,
@@ -60,7 +62,7 @@ export default function FamilyTree() {
     },
     {
       id: "sister",
-      name: familyInfo.siblings[0].name,
+      name: family?.sister.name ?? familyInfo.siblings[0].name,
       role: r.sister,
       level: 2,
       col: 4,

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { personalityData } from "../../data/siteContent";
 import { useTilt } from "../../hooks/useMousePosition";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 function HobbyCard({
   icon,
@@ -42,7 +42,8 @@ function HobbyCard({
 }
 
 export default function Personality() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const content = isMarathi ? marathiContent.personality : t.personality;
   return (
     <section
       id="personality"
@@ -80,7 +81,7 @@ export default function Personality() {
           style={{ marginBottom: "20px" }}
         >
           <p className="text-gray-300 text-lg leading-relaxed">
-            {t.personality.lifestyle}
+            {content.lifestyle}
           </p>
         </motion.div>
 
@@ -93,7 +94,7 @@ export default function Personality() {
           className="flex flex-wrap gap-3 justify-center mb-6 md:mb-10"
           style={{ marginBottom: "20px" }}
         >
-          {t.personality.values.map((v, i) => (
+          {content.values.map((v, i) => (
             <motion.span
               key={v}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -109,7 +110,7 @@ export default function Personality() {
 
         {/* Hobbies grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {t.personality.hobbies.map((h, i) => (
+          {content.hobbies.map((h, i) => (
             <HobbyCard key={h.title} {...h} delay={i * 0.07} />
           ))}
         </div>

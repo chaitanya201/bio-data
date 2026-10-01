@@ -634,7 +634,6 @@ export const media = {
   dayInLifePhotos: [personalInfo.photo],
 
   pdfImages: {
-    groom: personalInfo.photo,
     kundli: "/images/kundli-placeholder.jpg",
   },
 } as const;
@@ -1037,6 +1036,8 @@ export const en = {
     labels: {
       phone: "Phone",
 
+      email: "Email",
+
       linkedin: "LinkedIn",
 
       address: "Address",
@@ -1048,6 +1049,8 @@ export const en = {
       "Whether you're the potential life partner or a family member exploring this profile — thank you for taking the time. Every great story begins with a conversation. Let's start ours.",
 
     callNow: "Call Now",
+
+    sendEmail: "Send Email",
   },
 
   qr: {
@@ -1164,7 +1167,7 @@ export const mr: Translations = {
   splash: {
     welcome: "स्वागत आहे",
     title: "माझी कहाणी",
-    subtitle: "Chaitanya Sujit Sawant",
+    subtitle: "चैतन्य सुजित सावंत",
     selectLang: "भाषा निवडा",
     selectPrompt: "पुढे जाण्यासाठी तुमची पसंतीची भाषा निवडा",
     btnEnglish: "English",
@@ -1395,15 +1398,13 @@ export const mr: Translations = {
     titleAccent: "माहिती",
     description: "जवळच्या कौटुंबिक नातेसंबंधांची आणि पार्श्वभूमीची साधी यादी.",
     items: [
-      `${familyInfo.father.name} — वडील · ${familyInfo.father.occupation === "Farmer" ? "शेतकरी" : familyInfo.father.occupation}`,
-      `${familyInfo.mother.name} — आई · ${familyInfo.mother.occupation === "Homemaker" ? "गृहिणी" : familyInfo.mother.occupation}`,
-      ...familyInfo.siblings.map(
-        (sibling) => `${sibling.name} — बहीण · ${sibling.occupation === "Software Engineer" ? "सॉफ्टवेअर अभियंता" : sibling.occupation}`
-      ),
-      `${familyInfo.paternal.grandfather} — वडिलांकडील आजोबा`,
-      `${familyInfo.paternal.grandmother} — वडिलांकडील आजी`,
-      `${familyInfo.maternal.grandfather} — आईकडील आजोबा`,
-      `${familyInfo.maternal.grandmother} — आईकडील आजी`,
+      "सुजित बापूसाहेब सावंत — वडील · शेतकरी",
+      "सुमित्रा सुजित सावंत — आई · गृहिणी",
+      "सई सावंत — बहीण · सॉफ्टवेअर अभियंता",
+      "बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
+      "रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
+      "रामचंद्र रणनवरे — आईकडील आजोबा",
+      "वसुधा रणनवरे — आईकडील आजी",
     ],
   },
 
@@ -1414,6 +1415,7 @@ export const mr: Translations = {
     thankYou: "माझी माहिती पाहिल्याबद्दल धन्यवाद 🙏",
     labels: {
       phone: "दूरध्वनी",
+      email: "ईमेल",
       linkedin: "लिंक्डइन",
       address: "पत्ता",
     },
@@ -1421,6 +1423,7 @@ export const mr: Translations = {
     closingPara:
       "तुम्ही संभाव्य जीवनसाथी असाल किंवा कुटुंबातील सदस्य म्हणून ही माहिती पाहत असाल — वेळ दिल्याबद्दल धन्यवाद. प्रत्येक सुंदर कहाणी एका संवादाने सुरू होते. चला, आपली सुरुवात करूया.",
     callNow: "आता कॉल करा",
+    sendEmail: "ईमेल पाठवा",
   },
 
   qr: {

@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { UsersRound } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function RelativeInfo() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const items = isMarathi ? marathiContent.family.relativeItems : t.relativeInfo.items;
 
   return (
     <section id="relative-info" className="section-padding relative overflow-hidden">
@@ -29,7 +31,7 @@ export default function RelativeInfo() {
         </motion.header>
 
         <ul className="space-y-3 md:space-y-4">
-          {t.relativeInfo.items.map((item, index) => (
+          {items.map((item, index) => (
             <motion.li
               key={item}
               initial={{ opacity: 0, x: -18 }}

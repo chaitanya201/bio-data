@@ -2,13 +2,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { achievementsData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 function AchievementCard({
   data,
   delay,
+  revealLabel,
 }: {
   data: (typeof achievementsData)[0];
   delay: number;
+  revealLabel: string;
 }) {
   const [flipped, setFlipped] = useState(false);
 
@@ -49,7 +52,7 @@ function AchievementCard({
           >
             {data.year}
           </div>
-          <p className="text-gray-500 text-xs mt-2">Tap to reveal</p>
+          <p className="text-gray-500 text-xs mt-2">{revealLabel}</p>
         </div>
 
         {/* Back */}
@@ -81,7 +84,8 @@ function AchievementCard({
 }
 
 export default function Achievements() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const items = isMarathi ? marathiContent.achievements : achievementsData;
   return (
     <section
       id="achievements"
@@ -110,8 +114,8 @@ export default function Achievements() {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {achievementsData.map((item, i) => (
-            <AchievementCard key={item.title} data={item} delay={i * 0.08} />
+          {items.map((item, i) => (
+            <AchievementCard key={item.title} data={item} delay={i * 0.08} revealLabel={t.achievements.tapReveal} />
           ))}
         </div>
       </div>

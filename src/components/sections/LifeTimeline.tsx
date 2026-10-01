@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { lifeTimelineData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function LifeTimeline() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const events = isMarathi ? marathiContent.timeline : t.timeline.events;
   return (
     <section id="timeline" className="section-padding relative overflow-hidden">
       <div className="max-w-4xl mx-auto">
@@ -29,7 +30,7 @@ export default function LifeTimeline() {
           <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-600/50 to-transparent" />
 
           <div className="flex flex-col gap-y-5 md:gap-y-8">
-            {t.timeline.events.map((event, i) => (
+            {events.map((event, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}

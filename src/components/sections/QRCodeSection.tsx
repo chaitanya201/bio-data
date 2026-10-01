@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
-import { Share2, Copy, Check, MessageCircle } from "lucide-react";
+import { Copy, Check, MessageCircle } from "lucide-react";
 import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function QRCodeSection() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const displayName = isMarathi ? marathiContent.profile.fullName : personalInfo.fullName;
   const [copied, setCopied] = useState(false);
   const url = personalInfo.websiteUrl;
 
@@ -19,7 +21,9 @@ export default function QRCodeSection() {
 
   const whatsappShare = () => {
     const msg = encodeURIComponent(
-      `Check out ${personalInfo.fullName}'s marriage biodata: ${url}`
+      isMarathi
+        ? `${displayName} यांचा विवाह बायोडाटा पहा: ${url}`
+        : `Check out ${displayName}'s marriage biodata: ${url}`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
   };

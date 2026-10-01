@@ -113,7 +113,7 @@ export default function MaharashtraMap() {
                   fontSize="5"
                   fontFamily="Inter,sans-serif"
                 >
-                  Nagpur
+                  {t.map.nativeCity.split(",")[0]}
                 </text>
                 <text
                   x={NAGPUR.x + 5}
@@ -122,7 +122,7 @@ export default function MaharashtraMap() {
                   fontSize="3.5"
                   fontFamily="Inter,sans-serif"
                 >
-                  Native
+                  {t.map.nativeBadge}
                 </text>
               </motion.g>
 
@@ -164,7 +164,7 @@ export default function MaharashtraMap() {
                   fontSize="5"
                   fontFamily="Inter,sans-serif"
                 >
-                  Pune
+                  {t.map.currentCity.split(",")[0]}
                 </text>
                 <text
                   x={PUNE.x + 5}
@@ -173,7 +173,7 @@ export default function MaharashtraMap() {
                   fontSize="3.5"
                   fontFamily="Inter,sans-serif"
                 >
-                  Current
+                  {t.map.currentBadge}
                 </text>
               </motion.g>
             </svg>

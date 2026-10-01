@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { educationData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function EducationJourney() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const items = isMarathi ? marathiContent.education : educationData;
   return (
     <section
       id="education"
@@ -36,7 +38,7 @@ export default function EducationJourney() {
           <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-600 to-transparent" />
 
           <div className="flex flex-col gap-y-6 md:gap-y-10">
-            {educationData.map((item, i) => (
+            {items.map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}

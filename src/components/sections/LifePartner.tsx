@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { lifePartnerExpectations } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 function PartnerCard({
   item,
@@ -33,7 +33,8 @@ function PartnerCard({
 }
 
 export default function LifePartner() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const content = isMarathi ? marathiContent.partner : t.partner;
   return (
     <section id="partner" className="section-padding relative overflow-hidden">
       <div
@@ -68,11 +69,11 @@ export default function LifePartner() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="reading-copy text-center text-base md:text-lg mb-10 md:mb-14"
         >
-          {t.partner.intro}
+          {content.intro}
         </motion.p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-5xl mx-auto">
-          {t.partner.expectations.map((item, i) => (
+          {content.expectations.map((item, i) => (
             <PartnerCard key={item.title} item={item} delay={i * 0.08} />
           ))}
         </div>

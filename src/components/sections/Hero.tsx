@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { personalInfo } from '../../data/siteContent';
 import { useLanguage } from '../../context/LanguageContext';
+import { marathiContent } from '../../data/marathiContent';
 
 const container = {
   hidden: {},
@@ -9,11 +10,12 @@ const container = {
 };
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 };
 
 export default function Hero() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const profile = isMarathi ? marathiContent.profile : personalInfo;
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -56,7 +58,7 @@ export default function Hero() {
             >
               <span className="text-white">{t.hero.greeting} </span>
               <br />
-              <span className="text-gradient-hero">{personalInfo.shortName}</span>
+              <span className="text-gradient-hero">{profile.shortName}</span>
             </motion.h1>
 
             <motion.div variants={item} className="h-px w-24 bg-gradient-to-r from-amber-400 to-transparent mb-6 mx-auto lg:mx-0" />
@@ -124,7 +126,7 @@ export default function Hero() {
                 <div className="absolute inset-0 rounded-full glass-gold overflow-hidden border-2 border-amber-400/30 shadow-2xl shadow-amber-400/20">
                   <img
                     src={personalInfo.photo}
-                    alt={personalInfo.fullName}
+                    alt={profile.fullName}
                     className="w-full h-full object-cover"
                   />
                   {/* Glass overlay */}
@@ -138,9 +140,9 @@ export default function Hero() {
                   className="absolute -bottom-4 -right-4 glass-gold rounded-2xl px-4 py-2"
                 >
                   <p className="text-xs text-amber-400 font-semibold">
-                    {personalInfo.nativePlace.split(",")[0]} → {personalInfo.currentCity.split(",")[0]}
+                    {profile.nativePlace.split(",")[0]} → {profile.currentCity.split(",")[0]}
                   </p>
-                  <p className="text-[10px] text-gray-300">{personalInfo.currentCity.split(",")[1]?.trim()}</p>
+                  <p className="text-[10px] text-gray-300">{profile.currentCity.split(",")[1]?.trim()}</p>
                 </motion.div>
 
                 <motion.div
@@ -148,8 +150,8 @@ export default function Hero() {
                   transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                   className="absolute -top-4 -left-4 glass rounded-2xl px-4 py-2"
                 >
-                  <p className="text-xs text-blue-400 font-semibold">{personalInfo.currentRole}</p>
-                  <p className="text-[10px] text-gray-300">{personalInfo.currentEmployer}</p>
+                  <p className="text-xs text-blue-400 font-semibold">{profile.currentRole}</p>
+                  <p className="text-[10px] text-gray-300">{profile.currentEmployer}</p>
                 </motion.div>
               </div>
             </div>

@@ -2,22 +2,25 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
 import { media } from "../../data/siteContent";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function DayInLife() {
-  const { t } = useLanguage();
-  const items = t.dayInLife.items || [];
+  const { t, isMarathi } = useLanguage();
+  const items = isMarathi ? marathiContent.dayInLife : t.dayInLife.items;
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const horizontalViewportRef = useRef<HTMLDivElement>(null);
 
   const [trackWidth, setTrackWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
 
   // Track resizing dynamically to get exact pixel widths for the translation
   useEffect(() => {
     const handleResize = () => {
       setViewportHeight(window.innerHeight);
+      setViewportWidth(horizontalViewportRef.current?.clientWidth ?? 0);
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth);
       }
@@ -42,7 +45,6 @@ export default function DayInLife() {
   });
 
   // Calculate the exact translation limit: Total width of cards minus visible screen space + padding
-  const viewportWidth = horizontalViewportRef.current?.clientWidth ?? 0;
   const horizontalDistance = Math.max(0, trackWidth - viewportWidth);
   // The sticky interval is exactly the amount of vertical scroll needed to
   // move the track through all cards, then release back to normal scrolling.

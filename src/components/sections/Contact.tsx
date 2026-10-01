@@ -11,9 +11,11 @@ import {
 } from "lucide-react";
 import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function Contact() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const address = isMarathi ? marathiContent.profile.address : personalInfo.address;
   const [copied, setCopied] = useState<string | null>(null);
   const contacts = [
     {
@@ -40,7 +42,7 @@ export default function Contact() {
     {
       icon: MapPin,
       label: t.contact.labels.address,
-      value: personalInfo.address,
+      value: address,
       href: "#",
       color: "#F59E0B",
     },

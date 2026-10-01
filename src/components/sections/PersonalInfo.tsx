@@ -5,11 +5,10 @@ import {
   Calendar,
   Ruler,
   Droplets,
-  Star,
-  ChevronRight,
 } from "lucide-react";
-import { personalInfo, horoscopeData } from "../../data/siteContent";
+import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 const storyAccents = ["#3B82F6", "#F59E0B", "#EC4899", "#10B981"];
 
@@ -188,12 +187,13 @@ function StoryCardSlider() {
 }
 
 export default function PersonalInfo() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const profile = isMarathi ? marathiContent.profile : personalInfo;
   const quickFacts = [
     {
       label: t.personal.facts.height,
-      value: personalInfo.height,
-      sub: "185.4 cm",
+      value: profile.height,
+      sub: isMarathi ? "१८५.४ सेमी" : "185.4 cm",
     },
     {
       label: t.personal.facts.blood,
@@ -202,22 +202,22 @@ export default function PersonalInfo() {
     },
     {
       label: t.personal.facts.religion,
-      value: `${personalInfo.religion} / ${personalInfo.caste}`,
+      value: `${profile.religion} / ${profile.caste}`,
       sub: "",
     },
     {
       label: t.personal.facts.native,
-      value: personalInfo.nativePlace.split(",")[0],
+      value: profile.nativePlace.split(",")[0],
       sub: t.personal.facts.nativeSub,
     },
     {
       label: t.personal.facts.current,
-      value: personalInfo.currentCity.split(",")[0],
+      value: profile.currentCity.split(",")[0],
       sub: t.personal.facts.currentSub,
     },
     {
       label: t.personal.facts.rashi,
-      value: personalInfo.rashi,
+      value: profile.rashi,
       // sub: t.personal.facts.rashiSub,
     },
   ];
@@ -257,7 +257,7 @@ export default function PersonalInfo() {
               >
                 <img
                   src={personalInfo.photo}
-                  alt={personalInfo.fullName}
+                  alt={profile.fullName}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -273,7 +273,7 @@ export default function PersonalInfo() {
                 className="text-2xl sm:text-3xl font-bold text-white"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
-                {personalInfo.fullName}
+                {profile.fullName}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -294,16 +294,13 @@ export default function PersonalInfo() {
                 className="flex flex-wrap gap-x-4 gap-y-1 mt-3 justify-center sm:justify-start"
               >
                 {[
-                  { icon: MapPin, text: "Pune, Maharashtra" },
+                  { icon: MapPin, text: profile.currentCity },
                   {
                     icon: Calendar,
-                    text: `${personalInfo.dateOfBirth} · ${personalInfo.age} yrs`,
+                    text: `${profile.dateOfBirth} · ${isMarathi ? `${new Intl.NumberFormat("mr-IN").format(personalInfo.age)} वर्षे` : `${personalInfo.age} yrs`}`,
                   },
-                  {
-                    icon: Ruler,
-                    text: `${personalInfo.height} · ${personalInfo.weight}`,
-                  },
-                  { icon: Droplets, text: personalInfo.bloodGroup },
+                  { icon: Ruler, text: profile.height },
+                  { icon: Droplets, text: profile.bloodGroup },
                 ].map(({ icon: Icon, text }) => (
                   <span
                     key={text}
@@ -324,9 +321,8 @@ export default function PersonalInfo() {
                 className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start"
               >
                 {[
-                  personalInfo.religion,
-                  personalInfo.caste,
-                  personalInfo.gotra,
+                  profile.religion,
+                  profile.caste,
                 ].map((v) => (
                   <span
                     key={v}

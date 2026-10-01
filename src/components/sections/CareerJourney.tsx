@@ -1,34 +1,7 @@
 import { motion } from "framer-motion";
 import { careerData } from "../../data/siteContent";
-import { useCounterAnimation } from "../../hooks/useCounterAnimation";
 import { useLanguage } from "../../context/LanguageContext";
-
-function Counter({
-  target,
-  suffix,
-  label,
-}: {
-  target: number;
-  suffix: string;
-  label: string;
-}) {
-  const { count, ref } = useCounterAnimation(target);
-  return (
-    <div className="text-center">
-      <span
-        ref={ref}
-        className="text-3xl sm:text-4xl font-bold text-amber-400"
-        style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-      >
-        {count}
-        {suffix}
-      </span>
-      <p className="text-gray-400 text-xs uppercase tracking-wider mt-1">
-        {label}
-      </p>
-    </div>
-  );
-}
+import { marathiContent } from "../../data/marathiContent";
 
 const typeColors: Record<string, string> = {
   internship: "#F59E0B",
@@ -36,7 +9,7 @@ const typeColors: Record<string, string> = {
 };
 
 export default function CareerJourney() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
   return (
     <section id="career" className="section-padding relative overflow-hidden">
       <div className="max-w-5xl mx-auto">
@@ -65,7 +38,7 @@ export default function CareerJourney() {
 
           <div className="flex flex-col gap-y-6">
             {careerData.map((item, i) => {
-              const job = t.career.jobs[i];
+              const job = isMarathi ? marathiContent.career.jobs[i] : item;
               return (
                 <motion.div
                   key={i}
@@ -100,10 +73,10 @@ export default function CareerJourney() {
                           {item.type === "internship"
                             ? t.career.typeInternship
                             : t.career.typeFulltime}{" "}
-                          · {item.duration}
+                          · {job.duration}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500">{item.year}</span>
+                      <span className="text-xs text-gray-500">{job.year}</span>
                     </div>
                     <h3
                       className="text-white font-bold text-lg"
@@ -111,13 +84,13 @@ export default function CareerJourney() {
                         fontFamily: "'Playfair Display', Georgia, serif",
                       }}
                     >
-                      {item.role}
+                      {job.role}
                     </h3>
                     <p className="text-amber-400 font-medium text-sm">
-                      {item.company} · {item.location}
+                      {job.company} · {job.location}
                     </p>
                     <p className="text-gray-300 mt-3 text-[15px] leading-7 max-w-3xl">
-                      {item.description}
+                      {job.description}
                     </p>
                   </div>
                 </motion.div>

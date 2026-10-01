@@ -1,25 +1,18 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { horoscopeData } from "../../data/siteContent";
-import { Star, Moon, Sun, Shield } from "lucide-react";
+import { Star } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { marathiContent } from "../../data/marathiContent";
 
 export default function HoroscopeCard() {
-  const { t } = useLanguage();
+  const { t, isMarathi } = useLanguage();
+  const horoscope = isMarathi
+    ? { ...horoscopeData, ...marathiContent.horoscope, rashi: marathiContent.profile.rashi }
+    : horoscopeData;
   const [flipped, setFlipped] = useState(false);
   const frontItems = [
-    { icon: Star, label: t.horoscope.rashiLabel, value: horoscopeData.rashi },
-    {
-      icon: Moon,
-      label: t.horoscope.nakshatraLabel,
-      value: horoscopeData.nakshatra,
-    },
-    { icon: Sun, label: t.horoscope.gotraLabel, value: horoscopeData.gotra },
-    {
-      icon: Shield,
-      label: t.horoscope.manglikLabel,
-      value: horoscopeData.manglik,
-    },
+    { icon: Star, label: t.horoscope.rashiLabel, value: horoscope.rashi },
   ];
 
   return (
@@ -92,14 +85,14 @@ export default function HoroscopeCard() {
                   className="text-white text-2xl font-bold"
                   style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                 >
-                  {horoscopeData.dob}
+                  {horoscope.dob}
                 </h3>
                 <p className="text-gray-400 text-sm">
-                  {horoscopeData.tob} · {horoscopeData.pob}
+                  {horoscope.tob} · {horoscope.pob}
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {frontItems.map(({ icon: Icon, label, value }) => (
                   <div key={label} className="flex items-center gap-2">
                     <Icon size={14} className="text-amber-400 flex-shrink-0" />
@@ -141,9 +134,6 @@ export default function HoroscopeCard() {
               <div className="mt-4 flex gap-2">
                 <span className="px-3 py-1 rounded-full text-xs bg-amber-400/20 text-amber-400 border border-amber-400/30">
                   {t.horoscope.rashiChip}
-                </span>
-                <span className="px-3 py-1 rounded-full text-xs bg-blue-600/20 text-blue-400 border border-blue-600/30">
-                  {t.horoscope.manglikChip}
                 </span>
               </div>
             </div>
