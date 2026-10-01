@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Download, FileText, Loader } from "lucide-react";
 import jsPDF from "jspdf";
@@ -18,6 +18,7 @@ import { useLanguage } from "../../context/LanguageContext";
 
 const PAGE_WIDTH = 794;
 const PAGE_HEIGHT = 1123;
+const CONFETTI_DURATION_MS = 3800;
 
 const escapeHtml = (value: string) =>
   value
@@ -26,6 +27,131 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
+function ConfettiCelebration() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+
+    const colors = ["#F59E0B", "#FF6B35", "#34D399", "#60A5FA", "#F472B6"];
+    const particles = Array.from({ length: 100 }, () => ({
+      x: window.innerWidth / 2,
+      y: window.innerHeight * 0.35,
+      vx: (Math.random() - 0.5) * 12,
+      vy: -Math.random() * 12 - 4,
+      rotation: Math.random() * Math.PI,
+      spin: (Math.random() - 0.5) * 0.25,
+      size: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    }));
+    const startedAt = performance.now();
+    let frameId = 0;
+
+    const resize = () => {
+      const scale = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * scale;
+      canvas.height = window.innerHeight * scale;
+      context.setTransform(scale, 0, 0, scale, 0, 0);
+    };
+
+    const draw = (now: number) => {
+      const elapsed = now - startedAt;
+      if (elapsed >= CONFETTI_DURATION_MS) return;
+
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      context.globalAlpha = Math.min(1, (CONFETTI_DURATION_MS - elapsed) / 500);
+
+      particles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vy += 0.22;
+        particle.vx *= 0.99;
+        particle.rotation += particle.spin;
+
+        context.save();
+        context.translate(particle.x, particle.y);
+        context.rotate(particle.rotation);
+        context.fillStyle = particle.color;
+        context.fillRect(
+          -particle.size / 2,
+          -particle.size / 4,
+          particle.size,
+          particle.size / 2
+        );
+        context.restore();
+      });
+
+      frameId = requestAnimationFrame(draw);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    frameId = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[100] h-full w-full"
+    />
+  );
+}
+
+function DownloadActionButton({
+  generating,
+  done,
+  label,
+  downloadedLabel,
+  onClick,
+  floating = false,
+}: {
+  generating: boolean;
+  done: boolean;
+  label: string;
+  downloadedLabel: string;
+  onClick: () => void;
+  floating?: boolean;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      disabled={generating}
+      aria-busy={generating}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.97 }}
+      animate={floating ? { y: [0, -4, 0] } : undefined}
+      transition={floating ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" } : undefined}
+      className={`flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium shadow-lg shadow-amber-400/25 transition-all disabled:cursor-wait disabled:opacity-70 ${
+        floating ? "fixed bottom-6 right-4 z-50 sm:right-6" : "px-8"
+      }`}
+      style={{
+        background: "linear-gradient(135deg, #F59E0B, #D97706)",
+        color: "#0B1120",
+      }}
+    >
+      {generating ? (
+        <Loader size={16} className="animate-spin" />
+      ) : done ? (
+        downloadedLabel
+      ) : (
+        <>
+          <Download size={16} />
+          {label}
+        </>
+      )}
+    </motion.button>
+  );
+}
 
 export default function PDFDownload() {
   const { t, isMarathi } = useLanguage();
@@ -294,7 +420,7 @@ export default function PDFDownload() {
 
       doc.save(`${profile.shortName}_Biodata.pdf`);
       setDone(true);
-      setTimeout(() => setDone(false), 3000);
+      setTimeout(() => setDone(false), CONFETTI_DURATION_MS);
     } finally {
       container?.remove();
       setGenerating(false);
@@ -303,6 +429,15 @@ export default function PDFDownload() {
 
   return (
     <section id="pdf" className="section-padding relative overflow-hidden">
+      {done && <ConfettiCelebration />}
+      <DownloadActionButton
+        floating
+        generating={generating}
+        done={done}
+        label={t.pdf.btnDownload}
+        downloadedLabel={t.pdf.btnDownloaded}
+        onClick={generatePDF}
+      />
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -337,28 +472,13 @@ export default function PDFDownload() {
           <p className="text-gray-300 mb-6">{t.pdf.cardDesc}</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <motion.button
+            <DownloadActionButton
               onClick={generatePDF}
-              disabled={generating}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center justify-center gap-2 px-8 py-3 rounded-full font-medium text-sm transition-all shadow-lg shadow-amber-400/25 disabled:opacity-70"
-              style={{
-                background: "linear-gradient(135deg, #F59E0B, #D97706)",
-                color: "#0B1120",
-              }}
-            >
-              {generating ? (
-                <Loader size={16} className="animate-spin" />
-              ) : done ? (
-                t.pdf.btnDownloaded
-              ) : (
-                <>
-                  <Download size={16} />
-                  {t.pdf.btnDownload}
-                </>
-              )}
-            </motion.button>
+              generating={generating}
+              done={done}
+              label={t.pdf.btnDownload}
+              downloadedLabel={t.pdf.btnDownloaded}
+            />
           </div>
 
           <p className="text-gray-500 text-xs mt-4">{t.pdf.privacy}</p>
