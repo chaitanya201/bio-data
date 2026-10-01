@@ -23,11 +23,11 @@ export const personalInfo = {
 
   rashi: "Dhanu",
 
-  email: "Chaitanya.deshmukh\@example.com",
+  email: "chaitanyasawant05072001@gmail.com",
 
-  phone: "+91 98765 43210",
+  phone: "+91 9503688182",
 
-  linkedin: "linkedin.com/in/Chaitanyadeshmukh",
+  linkedin: "linkedin.com/in/im-chaitanya-sawant",
 
   address: "Ambegaon BK, Pune, Maharashtra — 411046",
 
@@ -82,17 +82,41 @@ export const familyInfo = {
 };
 
 export const relativeInfoData = [
-  { name: familyInfo.father.name, relation: familyInfo.father.relation, occupation: familyInfo.father.occupation },
-  { name: familyInfo.mother.name, relation: familyInfo.mother.relation, occupation: familyInfo.mother.occupation },
+  {
+    name: familyInfo.father.name,
+    relation: familyInfo.father.relation,
+    occupation: familyInfo.father.occupation,
+  },
+  {
+    name: familyInfo.mother.name,
+    relation: familyInfo.mother.relation,
+    occupation: familyInfo.mother.occupation,
+  },
   ...familyInfo.siblings.map((sibling) => ({
     name: sibling.name,
     relation: sibling.relation,
     occupation: sibling.occupation,
   })),
-  { name: familyInfo.paternal.grandfather, relation: "Paternal Grandfather", occupation: null },
-  { name: familyInfo.paternal.grandmother, relation: "Paternal Grandmother", occupation: null },
-  { name: familyInfo.maternal.grandfather, relation: "Maternal Grandfather", occupation: null },
-  { name: familyInfo.maternal.grandmother, relation: "Maternal Grandmother", occupation: null },
+  {
+    name: familyInfo.paternal.grandfather,
+    relation: "Paternal Grandfather",
+    occupation: null,
+  },
+  {
+    name: familyInfo.paternal.grandmother,
+    relation: "Paternal Grandmother",
+    occupation: null,
+  },
+  {
+    name: familyInfo.maternal.grandfather,
+    relation: "Maternal Grandfather",
+    occupation: null,
+  },
+  {
+    name: familyInfo.maternal.grandmother,
+    relation: "Maternal Grandmother",
+    occupation: null,
+  },
 ] as const;
 
 export const educationData = [
@@ -1019,8 +1043,9 @@ export const en = {
     title: "Relative",
     titleAccent: "Info",
     description: "A simple list of close family relationships and background.",
-    items: relativeInfoData.map(({ name, relation, occupation }) =>
-      `${name} — ${relation}${occupation ? ` · ${occupation}` : ""}`
+    items: relativeInfoData.map(
+      ({ name, relation, occupation }) =>
+        `${name} — ${relation}${occupation ? ` · ${occupation}` : ""}`,
     ),
   },
 
