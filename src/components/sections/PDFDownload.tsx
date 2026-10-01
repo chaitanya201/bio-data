@@ -16,6 +16,9 @@ import {
 import { marathiContent } from "../../data/marathiContent";
 import { useLanguage } from "../../context/LanguageContext";
 
+const PAGE_WIDTH = 794;
+const PAGE_HEIGHT = 1123;
+
 const escapeHtml = (value: string) =>
   value
     .replace(/&/g, "&amp;")
@@ -31,6 +34,8 @@ export default function PDFDownload() {
 
   const generatePDF = async () => {
     setGenerating(true);
+
+    let container: HTMLDivElement | null = null;
 
     try {
       const s = t.pdf.sections;
@@ -67,7 +72,13 @@ export default function PDFDownload() {
       const localizedCareer = isMarathi ? marathiContent.career.jobs : careerData;
       const localizedAchievements = isMarathi ? marathiContent.achievements : achievementsData;
       const profile = isMarathi ? marathiContent.profile : personalInfo;
-      const localizedHoroscope = isMarathi ? marathiContent.horoscope : horoscopeData;
+      const localizedHoroscope = isMarathi
+        ? {
+            ...horoscopeData,
+            ...marathiContent.horoscope,
+            rashi: marathiContent.profile.rashi,
+          }
+        : horoscopeData;
 
       const mkRow = (label: string, value: string) =>
         `<tr>
@@ -76,13 +87,13 @@ export default function PDFDownload() {
         </tr>`;
 
       const mkSection = (title: string, rows: string) =>
-        `<div style="margin:0 28px 22px;">
+        `<section style="margin:0 28px 22px;break-inside:avoid;page-break-inside:avoid;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
             <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
             <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
           <table style="width:100%;border-collapse:collapse;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;">${rows}</table>
-        </div>`;
+        </section>`;
 
       const familyRows = isMarathi
         ? [
@@ -127,7 +138,7 @@ export default function PDFDownload() {
         .join("");
 
       const careerRows = localizedCareer
-        .map((job, i) =>
+        .map((job) =>
           mkRow(
             job.year,
             `${job.company} · ${job.role} · ${job.location}${job.description ? ` · ${job.description}` : ""}`
@@ -141,79 +152,81 @@ export default function PDFDownload() {
         )
         .join("");
 
-      const html = `<div style="background:#0B1120;font-family:${fontFamily};color:white;width:794px;">
-          <div style="background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%);padding:36px 28px 28px;text-align:center;">
+      const headerHtml = `<header style="background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%);padding:36px 28px 28px;text-align:center;margin-bottom:28px;">
             <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${escapeHtml(profile.fullName)}</div>
-            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(t.hero.tagline)}</div>
+            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(profile.tagline)}</div>
             <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:20px;font-size:10px;color:#BFDBFE;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.marriageBiodata)}</div>
-          </div>
-          <div style="padding:28px 0 8px;">
-            ${mkSection(
-              s.personalInfo,
-              [
-                mkRow(s.fullName, profile.fullName),
-                mkRow(s.dateOfBirth, profile.dateOfBirth),
-                mkRow(s.age, String(profile.age)),
-                mkRow(s.height, profile.height),
-                mkRow(s.bloodGroup, profile.bloodGroup),
-                mkRow(s.nativePlace, profile.nativePlace),
-                mkRow(s.currentCity, profile.currentCity),
-                mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
-                mkRow(s.rashi, profile.rashi),
-              ].join("")
-            )}
-            ${mkSection(s.familyDetails, familyRows)}
-            ${mkSection(s.education, educationRows)}
-            ${mkSection(s.career, careerRows)}
-            ${mkSection(s.contact, [
-              mkRow(s.phone, personalInfo.phone),
-              mkRow(s.email, personalInfo.email),
-              mkRow(s.linkedin, personalInfo.linkedin),
-              mkRow(s.address, profile.address),
-            ].join(""))}
-            ${mkSection(
-              s.relativeDetails,
-              relativeRows
-            )}
-            ${mkSection(s.achievements, achievementRows)}
-            ${mkSection(
-              s.horoscope,
-              [
-                mkRow(s.rashi, isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi),
-                mkRow(s.timeOfBirth, localizedHoroscope.tob),
-                mkRow(s.placeOfBirth, localizedHoroscope.pob),
-              ].join("")
-            )}
+          </header>`;
 
-            <div style="margin:0 28px 24px;">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
-                <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
-              </div>
-              <div style="display:flex;gap:16px;align-items:stretch;">
-                <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
-                  <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:240px;object-fit:cover;border-radius:8px;" />
-                  <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.groomPhoto)}</div>
-                </div>
-                <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
-                  <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:100%;height:240px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.04);" />
-                  <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.kundli)}</div>
-                </div>
-              </div>
+      const sectionsHtml = [
+        mkSection(
+          s.personalInfo,
+          [
+            mkRow(s.fullName, profile.fullName),
+            mkRow(s.dateOfBirth, profile.dateOfBirth),
+            mkRow(s.age, String(profile.age)),
+            mkRow(s.height, profile.height),
+            mkRow(s.bloodGroup, profile.bloodGroup),
+            mkRow(s.nativePlace, profile.nativePlace),
+            mkRow(s.currentCity, profile.currentCity),
+            mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
+            mkRow(s.rashi, profile.rashi),
+          ].join("")
+        ),
+        mkSection(s.familyDetails, familyRows),
+        mkSection(s.education, educationRows),
+        mkSection(s.career, careerRows),
+        mkSection(
+          s.contact,
+          [
+            mkRow(s.phone, personalInfo.phone),
+            mkRow(s.email, personalInfo.email),
+            mkRow(s.linkedin, personalInfo.linkedin),
+            mkRow(s.address, profile.address),
+          ].join("")
+        ),
+        mkSection(s.relativeDetails, relativeRows),
+        mkSection(s.achievements, achievementRows),
+        mkSection(
+          s.horoscope,
+          [
+            mkRow(s.rashi, isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi),
+            mkRow(s.timeOfBirth, localizedHoroscope.tob),
+            mkRow(s.placeOfBirth, localizedHoroscope.pob),
+          ].join("")
+        ),
+        `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
+            <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="flex:1;min-width:0;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
+              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px;margin:0 auto;" />
+              <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.groomPhoto)}</div>
+            </div>
+            <div style="flex:1;min-width:0;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
+              <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.04);margin:0 auto;" />
+              <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.kundli)}</div>
             </div>
           </div>
-          <div style="text-align:center;padding:16px 28px 28px;color:#6B7280;font-size:10px;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</div>
-        </div>`;
+        </section>`,
+        `<footer style="text-align:center;padding:16px 28px 28px;color:#6B7280;font-size:10px;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
+      ];
 
-      const container = document.createElement("div");
+      container = document.createElement("div");
       container.style.cssText =
-        "position:fixed;left:-9999px;top:0;z-index:-1;pointer-events:none;";
-      container.innerHTML = html;
+        "position:fixed;left:-10000px;top:0;z-index:-1;pointer-events:none;";
       document.body.appendChild(container);
+
+      const staging = document.createElement("div");
+      staging.style.cssText = `position:absolute;left:0;top:0;width:${PAGE_WIDTH}px;font-family:${fontFamily};`;
+      staging.innerHTML = sectionsHtml.join("");
+      container.appendChild(staging);
 
       await document.fonts.ready;
       await Promise.all(
-        Array.from(container.querySelectorAll("img")).map(
+        Array.from(staging.querySelectorAll("img")).map(
           (image) =>
             image.complete
               ? Promise.resolve()
@@ -224,44 +237,66 @@ export default function PDFDownload() {
         )
       );
 
-      const canvas = await html2canvas(
-        container.firstElementChild as HTMLElement,
-        {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: "#0B1120",
-          logging: false,
+      const createPage = (withHeader: boolean) => {
+        const page = document.createElement("div");
+        page.className = "pdf-page";
+        page.style.cssText = `box-sizing:border-box;width:${PAGE_WIDTH}px;height:${PAGE_HEIGHT}px;padding:28px 0;background:#0B1120;color:white;font-family:${fontFamily};overflow:hidden;`;
+        if (withHeader) page.insertAdjacentHTML("beforeend", headerHtml);
+        container?.appendChild(page);
+        return page;
+      };
+
+      let page = createPage(true);
+      const addBlock = (block: Element) => {
+        page.appendChild(block);
+        const bottomLimit = page.getBoundingClientRect().bottom - 28;
+        const marginBottom = Number.parseFloat(getComputedStyle(block).marginBottom) || 0;
+
+        if (block.getBoundingClientRect().bottom + marginBottom <= bottomLimit) return;
+
+        block.remove();
+        page = createPage(false);
+        page.appendChild(block);
+
+        const pageBottomLimit = page.getBoundingClientRect().bottom - 28;
+        if (block.getBoundingClientRect().bottom + marginBottom > pageBottomLimit) {
+          throw new Error("A biodata section is too large to fit on one PDF page.");
         }
-      );
+      };
 
-      document.body.removeChild(container);
+      Array.from(staging.children).forEach(addBlock);
+      staging.remove();
 
-      const imgData = canvas.toDataURL("image/png");
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
+        compress: true,
       });
       const pw = doc.internal.pageSize.getWidth();
       const ph = doc.internal.pageSize.getHeight();
-      const imgWidth = pw;
-      const imgHeight = (canvas.height * pw) / canvas.width;
 
-      if (imgHeight <= ph) {
-        doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      } else {
-        let yOffset = 0;
-        while (yOffset < imgHeight) {
-          if (yOffset > 0) doc.addPage();
-          doc.addImage(imgData, "PNG", 0, -yOffset, imgWidth, imgHeight);
-          yOffset += ph;
-        }
+      for (const [index, pdfPage] of Array.from(
+        container.querySelectorAll<HTMLElement>(".pdf-page")
+      ).entries()) {
+        const canvas = await html2canvas(pdfPage, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#0B1120",
+          logging: false,
+        });
+        const imgData = canvas.toDataURL("image/jpeg", 0.94);
+        if (index > 0) doc.addPage();
+        doc.addImage(imgData, "JPEG", 0, 0, pw, ph);
+        canvas.width = 0;
+        canvas.height = 0;
       }
 
       doc.save(`${profile.shortName}_Biodata.pdf`);
       setDone(true);
       setTimeout(() => setDone(false), 3000);
     } finally {
+      container?.remove();
       setGenerating(false);
     }
   };
