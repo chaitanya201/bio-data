@@ -13,7 +13,7 @@ export default function Footer() {
           className="mb-6"
         >
           <div className="text-3xl font-bold text-gradient-gold mb-2">
-            Arjun Deshmukh
+            Chaitanya Sawant
           </div>
           <p className="text-gray-400 text-sm">{t.footer.tagline}</p>
         </motion.div>

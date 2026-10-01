@@ -13,7 +13,6 @@ import Footer from "./components/layout/Footer";
 // UI
 import ParticleBackground from "./components/ui/ParticleBackground";
 import MouseGlow from "./components/ui/MouseGlow";
-import MusicPlayer from "./components/ui/MusicPlayer";
 
 // Sections
 import PersonalInfo from "./components/sections/PersonalInfo";
@@ -57,7 +56,6 @@ function AppInner() {
           <MouseGlow />
           <ScrollProgress />
           <Navigation />
-          <MusicPlayer />
           <LanguageToggle />
 
           {/* Main content */}

@@ -52,7 +52,7 @@ export default function FamilyTree() {
     },
     {
       id: "groom",
-      name: personalInfo.shortName,
+      name: personalInfo.fullName,
       role: r.groom,
       level: 2,
       col: 2,
@@ -141,7 +141,7 @@ export default function FamilyTree() {
                         .join("")}
                     </div>
                     <p className="text-white text-xs font-bold leading-snug">
-                      {node.name.split(" ").slice(-1)}
+                      {node.name}
                     </p>
                     <p className="text-gray-400 text-[10px] mt-0.5">
                       {node.role}
@@ -192,7 +192,7 @@ export default function FamilyTree() {
                           .join("")}
                       </div>
                       <p className="text-white text-sm font-bold leading-snug">
-                        {node.name.split(" ").slice(0, 2).join(" ")}
+                        {node.name}
                       </p>
                       <p className="text-xs mt-1" style={{ color: node.color }}>
                         {node.role}

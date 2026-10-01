@@ -81,6 +81,20 @@ export const familyInfo = {
   },
 };
 
+export const relativeInfoData = [
+  { name: familyInfo.father.name, relation: familyInfo.father.relation, occupation: familyInfo.father.occupation },
+  { name: familyInfo.mother.name, relation: familyInfo.mother.relation, occupation: familyInfo.mother.occupation },
+  ...familyInfo.siblings.map((sibling) => ({
+    name: sibling.name,
+    relation: sibling.relation,
+    occupation: sibling.occupation,
+  })),
+  { name: familyInfo.paternal.grandfather, relation: "Paternal Grandfather", occupation: null },
+  { name: familyInfo.paternal.grandmother, relation: "Paternal Grandmother", occupation: null },
+  { name: familyInfo.maternal.grandfather, relation: "Maternal Grandfather", occupation: null },
+  { name: familyInfo.maternal.grandmother, relation: "Maternal Grandmother", occupation: null },
+] as const;
+
 export const educationData = [
   {
     year: "2017",
@@ -618,6 +632,11 @@ export const media = {
   groomPhotos: [{ src: personalInfo.photo }],
 
   dayInLifePhotos: [personalInfo.photo],
+
+  pdfImages: {
+    groom: personalInfo.photo,
+    kundli: "/images/kundli-placeholder.jpg",
+  },
 } as const;
 
 export const en = {
@@ -998,28 +1017,12 @@ export const en = {
 
   relativeInfo: {
     badge: "Family Circle",
-
     title: "Relative",
-
     titleAccent: "Info",
-
     description: "A simple list of close family relationships and background.",
-
-    items: [
-      "Rajesh Vishwas Deshmukh — Father · Retired Government Officer",
-
-      "Sunita Sujit Sawant — Mother · Homemaker",
-
-      "Priya Deshmukh — Sister · Teacher, Nagpur",
-
-      "Late Vishwas Rao Deshmukh — Paternal Grandfather",
-
-      "Kamalabai Deshmukh — Paternal Grandmother",
-
-      "Late Ramchandra Joshi — Maternal Grandfather",
-
-      "Vasudha Joshi — Maternal Grandmother",
-    ],
+    items: relativeInfoData.map(({ name, relation, occupation }) =>
+      `${name} — ${relation}${occupation ? ` · ${occupation}` : ""}`
+    ),
   },
 
   contact: {
@@ -1092,36 +1095,41 @@ export const en = {
 
       contact: "Contact",
 
+      relativeDetails: "Family Circle",
+
+      achievements: "Achievements",
+
+      horoscope: "Horoscope",
+
+      timeOfBirth: "Time of Birth",
+
+      placeOfBirth: "Place of Birth",
+
+      photos: "Photos",
+
       marriageBiodata: "Marriage Biodata",
 
       footer:
         "Designed with \u2764 for a new beginning \u00b7 Maharashtra, India",
 
       fullName: "Full Name",
-
       dateOfBirth: "Date of Birth",
-
-      heightWeight: "Height",
-
+      age: "Age",
+      height: "Height",
       bloodGroup: "Blood Group",
-
       nativePlace: "Native Place",
-
       currentCity: "Current City",
-
       religion: "Religion / Caste",
-
+      rashi: "Rashi",
       father: "Father",
-
       mother: "Mother",
-
+      sibling: "Sibling",
       phone: "Phone",
-
       email: "Email",
-
       linkedin: "LinkedIn",
-
       address: "Address",
+      groomPhoto: "Groom",
+      kundli: "Kundli",
     },
   },
 
@@ -1387,13 +1395,15 @@ export const mr: Translations = {
     titleAccent: "माहिती",
     description: "जवळच्या कौटुंबिक नातेसंबंधांची आणि पार्श्वभूमीची साधी यादी.",
     items: [
-      "Sujit Bapusaheb Sawant — वडील · शेतकरी",
-      "Sumitra Sujit Sawant — आई · गृहिणी",
-      "Sayee Sawant — बहीण · सॉफ्टवेअर अभियंता",
-      "Bapusaheb Ganesh Sawant — वडिलांकडील आजोबा",
-      "Ranjana Bapusaheb Sawant — वडिलांकडील आजी",
-      "Ramchandra Rananavare — आईकडील आजोबा",
-      "Vasudha Rananavare — आईकडील आजी",
+      `${familyInfo.father.name} — वडील · ${familyInfo.father.occupation === "Farmer" ? "शेतकरी" : familyInfo.father.occupation}`,
+      `${familyInfo.mother.name} — आई · ${familyInfo.mother.occupation === "Homemaker" ? "गृहिणी" : familyInfo.mother.occupation}`,
+      ...familyInfo.siblings.map(
+        (sibling) => `${sibling.name} — बहीण · ${sibling.occupation === "Software Engineer" ? "सॉफ्टवेअर अभियंता" : sibling.occupation}`
+      ),
+      `${familyInfo.paternal.grandfather} — वडिलांकडील आजोबा`,
+      `${familyInfo.paternal.grandmother} — वडिलांकडील आजी`,
+      `${familyInfo.maternal.grandfather} — आईकडील आजोबा`,
+      `${familyInfo.maternal.grandmother} — आईकडील आजी`,
     ],
   },
 
@@ -1440,21 +1450,32 @@ export const mr: Translations = {
       education: "शिक्षण",
       career: "करिअर",
       contact: "संपर्क",
+      relativeDetails: "कौटुंबिक वर्तुळ",
+      achievements: "उपलब्धी",
+      horoscope: "कुंडली",
+      timeOfBirth: "जन्मवेळ",
+      placeOfBirth: "जन्मस्थळ",
+      photos: "छायाचित्रे",
       marriageBiodata: "विवाह बायोडाटा",
       footer: "महाराष्ट्र, भारत · नव्या सुरुवातीसाठी ❤️ ने बनवले",
       fullName: "पूर्ण नाव",
       dateOfBirth: "जन्मतारीख",
-      heightWeight: "उंची",
+      age: "वय",
+      height: "उंची",
       bloodGroup: "रक्तगट",
       nativePlace: "मूळगाव",
       currentCity: "सध्याचे शहर",
       religion: "धर्म / जात",
+      rashi: "राशी",
       father: "वडील",
       mother: "आई",
+      sibling: "भावंड",
       phone: "दूरध्वनी",
       email: "ईमेल",
       linkedin: "लिंक्डइन",
       address: "पत्ता",
+      groomPhoto: "वर",
+      kundli: "कुंडली",
     },
   },
 

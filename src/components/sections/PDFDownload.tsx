@@ -3,8 +3,25 @@ import { motion } from "framer-motion";
 import { Download, FileText, Loader } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { personalInfo, educationData, careerData } from "../../data/siteContent";
+import {
+  personalInfo,
+  familyInfo,
+  educationData,
+  careerData,
+  achievementsData,
+  horoscopeData,
+  relativeInfoData,
+  media,
+} from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 export default function PDFDownload() {
   const { t, isMarathi } = useLanguage();
@@ -13,39 +30,79 @@ export default function PDFDownload() {
 
   const generatePDF = async () => {
     setGenerating(true);
+
     try {
       const s = t.pdf.sections;
-      const fm = t.family.members;
+      const roles = t.familyTree.roles;
       const fontFamily = isMarathi
         ? "'Noto Sans Devanagari', 'Noto Sans', Arial, sans-serif"
         : "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
       const mkRow = (label: string, value: string) =>
         `<tr>
-          <td style="padding:7px 14px;color:#9CA3AF;font-size:12px;white-space:nowrap;width:160px;border-bottom:1px solid rgba(255,255,255,0.05);">${label}</td>
-          <td style="padding:7px 14px;color:#E2E8F0;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.05);">${value}</td>
+          <td style="padding:8px 14px;color:#9CA3AF;font-size:12px;white-space:nowrap;width:160px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;">${escapeHtml(label)}</td>
+          <td style="padding:8px 14px;color:#E2E8F0;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.05);">${escapeHtml(value)}</td>
         </tr>`;
 
       const mkSection = (title: string, rows: string) =>
         `<div style="margin:0 28px 22px;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
             <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
-            <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${title}</span>
+            <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
           <table style="width:100%;border-collapse:collapse;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;">${rows}</table>
         </div>`;
 
+      const familyRows = [
+        mkRow(roles.father, `${familyInfo.father.name} · ${familyInfo.father.occupation}`),
+        mkRow(roles.mother, `${familyInfo.mother.name} · ${familyInfo.mother.occupation}`),
+        ...familyInfo.siblings.map((sibling) =>
+          mkRow(roles.sister, `${sibling.name} · ${sibling.occupation}`)
+        ),
+        mkRow(roles.paternalGrandfather, familyInfo.paternal.grandfather),
+        mkRow(roles.paternalGrandmother, familyInfo.paternal.grandmother),
+        mkRow(roles.maternalGrandfather, familyInfo.maternal.grandfather),
+        mkRow(roles.maternalGrandmother, familyInfo.maternal.grandmother),
+      ].join("");
+
+      const relativeRows = relativeInfoData
+        .map(({ name, relation, occupation }) =>
+          mkRow(
+            relation,
+            `${name}${occupation ? ` · ${occupation}` : ""}`
+          )
+        )
+        .join("");
+
+      const educationRows = educationData
+        .map((item) =>
+          mkRow(
+            item.year,
+            `${item.institution} · ${item.degree} · ${item.location}`
+          )
+        )
+        .join("");
+
+      const careerRows = careerData
+        .map((item) =>
+          mkRow(
+            item.year,
+            `${item.company} · ${item.role} · ${item.location}`
+          )
+        )
+        .join("");
+
+      const achievementRows = achievementsData
+        .map((item) =>
+          mkRow(item.year, `${item.title} · ${item.fullTitle} · ${item.issuer}`)
+        )
+        .join("");
+
       const html = `<div style="background:#0B1120;font-family:${fontFamily};color:white;width:794px;">
           <div style="background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%);padding:36px 28px 28px;text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${
-              personalInfo.fullName
-            }</div>
-            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${
-              personalInfo.tagline
-            }</div>
-            <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:20px;font-size:10px;color:#BFDBFE;letter-spacing:2px;text-transform:uppercase;">${
-              s.marriageBiodata
-            }</div>
+            <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${escapeHtml(personalInfo.fullName)}</div>
+            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(personalInfo.tagline)}</div>
+            <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:20px;font-size:10px;color:#BFDBFE;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.marriageBiodata)}</div>
           </div>
           <div style="padding:28px 0 8px;">
             ${mkSection(
@@ -53,75 +110,76 @@ export default function PDFDownload() {
               [
                 mkRow(s.fullName, personalInfo.fullName),
                 mkRow(s.dateOfBirth, personalInfo.dateOfBirth),
-                mkRow(
-                  s.heightWeight,
-                  `${personalInfo.height} / ${personalInfo.weight}`
-                ),
+                mkRow(s.age, String(personalInfo.age)),
+                mkRow(s.height, personalInfo.height),
                 mkRow(s.bloodGroup, personalInfo.bloodGroup),
                 mkRow(s.nativePlace, personalInfo.nativePlace),
                 mkRow(s.currentCity, personalInfo.currentCity),
-                mkRow(
-                  s.religion,
-                  `${personalInfo.religion} \u00b7 ${personalInfo.caste}`
-                ),
-                mkRow(s.gotra, personalInfo.gotra),
-                mkRow(
-                  s.rashiNakshatra,
-                  `${personalInfo.rashi} \u00b7 ${personalInfo.nakshatra}`
-                ),
-                mkRow(s.manglik, personalInfo.manglik),
+                mkRow(s.religion, `${personalInfo.religion} · ${personalInfo.caste}`),
+                mkRow(s.rashi, personalInfo.rashi),
               ].join("")
             )}
+            ${mkSection(s.familyDetails, familyRows)}
+            ${mkSection(s.education, educationRows)}
+            ${mkSection(s.career, careerRows)}
+            ${mkSection(s.contact, [
+              mkRow(s.phone, personalInfo.phone),
+              mkRow(s.email, personalInfo.email),
+              mkRow(s.linkedin, personalInfo.linkedin),
+              mkRow(s.address, personalInfo.address),
+            ].join(""))}
             ${mkSection(
-              s.familyDetails,
+              s.relativeDetails,
+              relativeRows
+            )}
+            ${mkSection(s.achievements, achievementRows)}
+            ${mkSection(
+              s.horoscope,
               [
-                mkRow(s.father, `${fm[0].name} \u2014 ${fm[0].occupation}`),
-                mkRow(s.mother, `${fm[1].name} \u2014 ${fm[1].occupation}`),
-                mkRow(
-                  fm[2].relation,
-                  `${fm[2].name} \u2014 ${fm[2].occupation}`
-                ),
+                mkRow(s.rashi, horoscopeData.rashi),
+                mkRow(s.timeOfBirth, horoscopeData.tob),
+                mkRow(s.placeOfBirth, horoscopeData.pob),
               ].join("")
             )}
-            ${mkSection(
-              s.education,
-              educationData
-                .slice(0, 4)
-                .map((e) =>
-                  mkRow(
-                    e.year,
-                    `${e.institution} \u2014 ${e.degree.substring(0, 55)}`
-                  )
-                )
-                .join("")
-            )}
-            ${mkSection(
-              s.career,
-              careerData
-                .map((c) => mkRow(c.year, `${c.company} \u2014 ${c.role}`))
-                .join("")
-            )}
-            ${mkSection(
-              s.contact,
-              [
-                mkRow(s.phone, personalInfo.phone),
-                mkRow(s.email, personalInfo.email),
-                mkRow(s.linkedin, personalInfo.linkedin),
-                mkRow(s.address, personalInfo.address),
-              ].join("")
-            )}
+
+            <div style="margin:0 28px 24px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
+                <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+              </div>
+              <div style="display:flex;gap:16px;align-items:stretch;">
+                <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
+                  <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.groom)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:240px;object-fit:cover;border-radius:8px;" />
+                  <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.groomPhoto)}</div>
+                </div>
+                <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
+                  <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:100%;height:240px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.04);" />
+                  <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.kundli)}</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="text-align:center;padding:16px 28px 28px;color:#6B7280;font-size:10px;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${
-            s.footer
-          }</div>
+          <div style="text-align:center;padding:16px 28px 28px;color:#6B7280;font-size:10px;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</div>
         </div>`;
 
       const container = document.createElement("div");
-      container.style.cssText = "position:fixed;left:-9999px;top:0;z-index:-1;";
+      container.style.cssText =
+        "position:fixed;left:-9999px;top:0;z-index:-1;pointer-events:none;";
       container.innerHTML = html;
       document.body.appendChild(container);
 
       await document.fonts.ready;
+      await Promise.all(
+        Array.from(container.querySelectorAll("img")).map(
+          (image) =>
+            image.complete
+              ? Promise.resolve()
+              : new Promise<void>((resolve) => {
+                  image.addEventListener("load", () => resolve(), { once: true });
+                  image.addEventListener("error", () => resolve(), { once: true });
+                })
+        )
+      );
 
       const canvas = await html2canvas(
         container.firstElementChild as HTMLElement,
@@ -157,7 +215,7 @@ export default function PDFDownload() {
         }
       }
 
-      doc.save(`${personalInfo.shortName}_Deshmukh_Biodata.pdf`);
+      doc.save(`${personalInfo.shortName}_Biodata.pdf`);
       setDone(true);
       setTimeout(() => setDone(false), 3000);
     } finally {
@@ -188,7 +246,6 @@ export default function PDFDownload() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          // viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="glass rounded-3xl p-5 sm:p-8 text-center"
         >
