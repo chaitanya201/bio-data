@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
+import { media } from "../../data/siteContent";
 
 export default function DayInLife() {
   const { t } = useLanguage();
@@ -8,14 +9,15 @@ export default function DayInLife() {
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const horizontalViewportRef = useRef<HTMLDivElement>(null);
 
-  const [windowWidth, setWindowWidth] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
 
   // Track resizing dynamically to get exact pixel widths for the translation
   useEffect(() => {
     const handleResize = () => {
-      setWindowWidth(window.innerWidth);
+      setViewportHeight(window.innerHeight);
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth);
       }
@@ -40,17 +42,21 @@ export default function DayInLife() {
   });
 
   // Calculate the exact translation limit: Total width of cards minus visible screen space + padding
-  const xMaxTranslation = Math.max(0, trackWidth - windowWidth + 64);
+  const viewportWidth = horizontalViewportRef.current?.clientWidth ?? 0;
+  const horizontalDistance = Math.max(0, trackWidth - viewportWidth);
+  // The sticky interval is exactly the amount of vertical scroll needed to
+  // move the track through all cards, then release back to normal scrolling.
+  const sectionHeight = viewportHeight + horizontalDistance;
 
   // Map vertical scroll progress (0 to 1) directly to horizontal pixel shift
-  const x = useTransform(scrollYProgress, [0, 1], [0, -xMaxTranslation]);
+  const x = useTransform(scrollYProgress, [0, 1], [0, -horizontalDistance]);
 
   return (
     <section
       ref={sectionRef}
       id="dayinlife"
       className="relative block" // Ensures it behaves as a block anchor for sticky positioning
-      style={{ height: `${items.length * 80 + 120}vh` }} // Gives enough runway to scroll through
+      style={{ height: `${sectionHeight || window.innerHeight}px` }} // One viewport + horizontal travel distance
     >
       {/* Sticky box: This catches the screen viewport and locks it */}
       <div className="sticky top-0 left-0 h-screen w-full overflow-hidden flex flex-col justify-center bg-transparent">
@@ -68,7 +74,7 @@ export default function DayInLife() {
         </div>
 
         {/* Horizontal Scroll Window */}
-        <div className="w-full overflow-hidden px-4 sm:px-8 lg:px-16">
+        <div ref={horizontalViewportRef} className="w-full overflow-hidden px-4 sm:px-8 lg:px-16">
           <motion.div
             ref={trackRef}
             style={{ x }} // Framer motion optimizes this translation via hardware acceleration
@@ -77,10 +83,19 @@ export default function DayInLife() {
             {items.map((item, i) => (
               <div
                 key={i}
-                className="glass rounded-3xl p-6 flex-shrink-0 w-64 sm:w-72 md:w-80"
+                className="glass rounded-3xl p-4 sm:p-5 flex-shrink-0 w-72 sm:w-80 md:w-96"
                 style={{ borderTop: `3px solid ${item.color}` }}
               >
-                <div className="text-4xl mb-3">{item.icon}</div>
+                <div className="relative h-36 sm:h-40 rounded-2xl overflow-hidden mb-5">
+                  <img
+                    src={media.dayInLifePhotos[i % media.dayInLifePhotos.length]}
+                    alt=""
+                    className="w-full h-full object-cover object-center"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120]/80 via-transparent to-transparent" />
+                  <div className="absolute left-4 bottom-3 text-3xl">{item.icon}</div>
+                </div>
                 <div
                   className="text-xs font-bold mb-1 uppercase tracking-wider"
                   style={{ color: item.color }}
@@ -93,7 +108,7 @@ export default function DayInLife() {
                 >
                   {item.title}
                 </h4>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-300 text-sm leading-7">
                   {item.description}
                 </p>
               </div>

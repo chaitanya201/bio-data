@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { Share2, Copy, Check, MessageCircle } from "lucide-react";
-import { personalInfo } from "../../data/biodata";
+import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function QRCodeSection() {
@@ -19,7 +19,7 @@ export default function QRCodeSection() {
 
   const whatsappShare = () => {
     const msg = encodeURIComponent(
-      `Check out Arjun Deshmukh's marriage biodata: ${url}`
+      `Check out ${personalInfo.fullName}'s marriage biodata: ${url}`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
   };

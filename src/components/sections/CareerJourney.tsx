@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { careerData, counters } from "../../data/biodata";
+import { careerData } from "../../data/siteContent";
 import { useCounterAnimation } from "../../hooks/useCounterAnimation";
 import { useLanguage } from "../../context/LanguageContext";
 
@@ -59,25 +59,6 @@ export default function CareerJourney() {
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-4" />
         </motion.div>
 
-        {/* Counters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          // viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="glass rounded-3xl p-5 sm:p-8 mb-8 md:mb-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
-          style={{ marginBottom: "20px" }}
-        >
-          {counters.map((c, idx) => (
-            <Counter
-              key={c.label}
-              target={c.value}
-              suffix={c.suffix}
-              label={t.career.counters[idx] ?? c.label}
-            />
-          ))}
-        </motion.div>
-
         {/* Timeline */}
         <div className="relative">
           <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-600/50 to-transparent" />
@@ -119,7 +100,7 @@ export default function CareerJourney() {
                           {item.type === "internship"
                             ? t.career.typeInternship
                             : t.career.typeFulltime}{" "}
-                          · {job?.duration ?? item.duration}
+                          · {item.duration}
                         </span>
                       </div>
                       <span className="text-xs text-gray-500">{item.year}</span>
@@ -130,13 +111,13 @@ export default function CareerJourney() {
                         fontFamily: "'Playfair Display', Georgia, serif",
                       }}
                     >
-                      {job?.role ?? item.role}
+                      {item.role}
                     </h3>
                     <p className="text-amber-400 font-medium text-sm">
                       {item.company} · {item.location}
                     </p>
-                    <p className="text-gray-400 mt-2 text-sm leading-relaxed">
-                      {job?.description ?? item.description}
+                    <p className="text-gray-300 mt-3 text-[15px] leading-7 max-w-3xl">
+                      {item.description}
                     </p>
                   </div>
                 </motion.div>

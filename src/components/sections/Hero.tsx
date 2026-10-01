@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { personalInfo } from '../../data/biodata';
+import { personalInfo } from '../../data/siteContent';
 import { useLanguage } from '../../context/LanguageContext';
 
 const container = {
@@ -137,8 +137,10 @@ export default function Hero() {
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                   className="absolute -bottom-4 -right-4 glass-gold rounded-2xl px-4 py-2"
                 >
-                  <p className="text-xs text-amber-400 font-semibold">Nagpur → Pune</p>
-                  <p className="text-[10px] text-gray-300">Maharashtra</p>
+                  <p className="text-xs text-amber-400 font-semibold">
+                    {personalInfo.nativePlace.split(",")[0]} → {personalInfo.currentCity.split(",")[0]}
+                  </p>
+                  <p className="text-[10px] text-gray-300">{personalInfo.currentCity.split(",")[1]?.trim()}</p>
                 </motion.div>
 
                 <motion.div
@@ -146,8 +148,8 @@ export default function Hero() {
                   transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                   className="absolute -top-4 -left-4 glass rounded-2xl px-4 py-2"
                 >
-                  <p className="text-xs text-blue-400 font-semibold">Staff DevOps</p>
-                  <p className="text-[10px] text-gray-300">Razorpay</p>
+                  <p className="text-xs text-blue-400 font-semibold">{personalInfo.currentRole}</p>
+                  <p className="text-[10px] text-gray-300">{personalInfo.currentEmployer}</p>
                 </motion.div>
               </div>
             </div>

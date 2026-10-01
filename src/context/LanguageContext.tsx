@@ -1,10 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { en, type Lang, type Translations } from '../locales/en';
-import { mr } from '../locales/mr';
+import { translations, type Lang, type Translations } from '../data/siteContent';
 
 const STORAGE_KEY = 'biodata-lang';
 
-const translations: Record<Lang, Translations> = { en, mr };
 
 type LanguageContextValue = {
   lang: Lang;

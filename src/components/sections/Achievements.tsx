@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { achievementsData } from "../../data/biodata";
+import { achievementsData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 function AchievementCard({

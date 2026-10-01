@@ -9,7 +9,7 @@ import {
   Check,
   ExternalLink,
 } from "lucide-react";
-import { personalInfo } from "../../data/biodata";
+import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function Contact() {

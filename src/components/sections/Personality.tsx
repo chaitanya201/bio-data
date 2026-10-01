@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { personalityData } from "../../data/biodata";
+import { personalityData } from "../../data/siteContent";
 import { useTilt } from "../../hooks/useMousePosition";
 import { useLanguage } from "../../context/LanguageContext";
 

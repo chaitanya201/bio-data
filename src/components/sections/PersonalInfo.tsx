@@ -8,7 +8,7 @@ import {
   Star,
   ChevronRight,
 } from "lucide-react";
-import { personalInfo, horoscopeData } from "../../data/biodata";
+import { personalInfo, horoscopeData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 const storyAccents = ["#3B82F6", "#F59E0B", "#EC4899", "#10B981"];
@@ -156,7 +156,7 @@ function StoryCardSlider() {
       </div>
 
       {/* Desktop: 2×2 grid */}
-      <div className="hidden md:grid grid-cols-2 gap-4">
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-5xl mx-auto">
         {storyCards.map((card, i) => (
           <motion.div
             key={card.title}
@@ -179,7 +179,7 @@ function StoryCardSlider() {
             >
               {card.title}
             </h4>
-            <p className="text-gray-300 text-sm leading-relaxed">{card.body}</p>
+            <p className="text-gray-300 text-[15px] leading-7">{card.body}</p>
           </motion.div>
         ))}
       </div>
@@ -190,41 +190,35 @@ function StoryCardSlider() {
 export default function PersonalInfo() {
   const { t } = useLanguage();
   const quickFacts = [
-    { label: t.personal.facts.height, value: "5'10\"", sub: "178 cm" },
     {
-      label: t.personal.facts.weight,
-      value: "72 kg",
-      sub: t.personal.facts.weightSub,
+      label: t.personal.facts.height,
+      value: personalInfo.height,
+      sub: "185.4 cm",
     },
     {
       label: t.personal.facts.blood,
-      value: "O+",
+      value: personalInfo.bloodGroup,
       sub: t.personal.facts.bloodSub,
     },
     {
-      label: t.personal.facts.gotra,
-      value: "Kashyap",
-      sub: personalInfo.religion,
+      label: t.personal.facts.religion,
+      value: `${personalInfo.religion} / ${personalInfo.caste}`,
+      sub: "",
     },
     {
       label: t.personal.facts.native,
-      value: "Nagpur",
+      value: personalInfo.nativePlace.split(",")[0],
       sub: t.personal.facts.nativeSub,
     },
     {
       label: t.personal.facts.current,
-      value: "Pune",
+      value: personalInfo.currentCity.split(",")[0],
       sub: t.personal.facts.currentSub,
     },
     {
       label: t.personal.facts.rashi,
-      value: "Vrishabha",
-      sub: t.personal.facts.rashiSub,
-    },
-    {
-      label: t.personal.facts.nakshatra,
-      value: "Rohini",
-      sub: t.personal.facts.nakshatraSub,
+      value: personalInfo.rashi,
+      // sub: t.personal.facts.rashiSub,
     },
   ];
   return (
@@ -428,66 +422,6 @@ export default function PersonalInfo() {
             ))}
           </div>
         </div>
-
-        {/* ── Part 5: Horoscope Preview ───────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ margin: "-40px" }}
-          transition={{ duration: 0.55 }}
-          className="rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(245,158,11,0.07) 0%, rgba(37,99,235,0.07) 100%)",
-            border: "1px solid rgba(245,158,11,0.2)",
-            marginTop: "20px",
-            padding: "40px",
-          }}
-        >
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Star size={14} className="text-amber-400" />
-              <span className="text-amber-400 text-lg uppercase tracking-widest font-semibold">
-                {t.personal.horoscopeSnap}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-1">
-              {[
-                { label: t.personal.facts.rashi, value: horoscopeData.rashi },
-                {
-                  label: t.personal.facts.nakshatra,
-                  value: horoscopeData.nakshatra,
-                },
-                {
-                  label: t.horoscope.manglikLabel,
-                  value: horoscopeData.manglik,
-                },
-              ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="text-gray-500 text-[10px] uppercase tracking-wider">
-                    {label}
-                  </p>
-                  <p className="text-white text-sm font-semibold">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <button
-            onClick={() =>
-              document
-                .getElementById("horoscope")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium flex-shrink-0 transition-all hover:scale-105"
-            style={{
-              background: "rgba(245,158,11,0.15)",
-              color: "#FCD34D",
-              border: "1px solid rgba(245,158,11,0.3)",
-            }}
-          >
-            {t.personal.viewHoroscope} <ChevronRight size={14} />
-          </button>
-        </motion.div>
       </div>
     </section>
   );

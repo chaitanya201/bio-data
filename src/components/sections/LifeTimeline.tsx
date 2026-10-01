@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { lifeTimelineData } from "../../data/biodata";
+import { lifeTimelineData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function LifeTimeline() {
@@ -61,7 +61,7 @@ export default function LifeTimeline() {
                     >
                       {event.title}
                     </h3>
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-gray-300 text-[15px] mt-2 leading-7">
                       {event.description}
                     </p>
                   </div>

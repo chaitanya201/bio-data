@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { educationData } from "../../data/biodata";
+import { educationData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function EducationJourney() {
@@ -77,7 +77,7 @@ export default function EducationJourney() {
                       >
                         {item.institution}
                       </h3>
-                      <p className="text-gray-300 mt-1 text-sm">
+                      <p className="text-gray-300 mt-2 text-[15px] leading-7">
                         {item.degree}
                       </p>
                       <p className="text-gray-500 text-xs mt-1">

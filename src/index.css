@@ -15,7 +15,7 @@
 
 html {
   background-color: #0b1120;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -23,13 +23,13 @@ body {
   font-family: "Inter", system-ui, sans-serif;
   background-color: #0b1120;
   color: #ffffff;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
 #root {
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -213,4 +213,114 @@ html.lang-mr .glass-gold {
 }
 html.lang-mr ::-webkit-scrollbar-thumb {
   background: #ff6b35;
+}
+
+
+/* Editorial, text-heavy content */
+.reading-copy {
+  max-width: 68ch;
+  margin-inline: auto;
+  line-height: 1.85;
+  color: rgb(209 213 219);
+}
+
+.reading-card {
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+}
+
+.gallery-spotlight-shell {
+  position: relative;
+  padding: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.gallery-spotlight-backdrop {
+  position: absolute;
+  inset: 1.5rem 0 0 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(245, 158, 11, 0.16);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.09), rgba(37, 99, 235, 0.06));
+  transform: rotate(1.2deg);
+  pointer-events: none;
+}
+
+.gallery-spotlight {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: min(68vh, 680px);
+  overflow: hidden;
+  border-radius: 2rem;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+  text-align: left;
+  cursor: zoom-in;
+}
+
+.gallery-spotlight-image {
+  width: 100%;
+  height: 100%;
+  min-height: min(68vh, 680px);
+  object-fit: cover;
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 500ms ease;
+}
+
+.gallery-spotlight:hover .gallery-spotlight-image,
+.gallery-spotlight:focus-visible .gallery-spotlight-image {
+  transform: scale(1.035);
+  filter: saturate(1.05);
+}
+
+.gallery-spotlight-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(5, 8, 20, 0.88), rgba(5, 8, 20, 0.08) 52%, rgba(5, 8, 20, 0.12)),
+    linear-gradient(135deg, rgba(245, 158, 11, 0.12), transparent 42%);
+}
+
+.gallery-spotlight-content {
+  position: absolute;
+  left: clamp(1.25rem, 4vw, 3rem);
+  right: clamp(1.25rem, 4vw, 3rem);
+  bottom: clamp(1.25rem, 4vw, 3rem);
+}
+
+.gallery-thumbnail {
+  width: 74px;
+  height: 74px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.65;
+  transition: opacity 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+
+.gallery-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-thumbnail:hover,
+.gallery-thumbnail-active {
+  opacity: 1;
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.65);
+}
+
+@media (max-width: 640px) {
+  .gallery-spotlight,
+  .gallery-spotlight-image {
+    min-height: 58vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-spotlight-image,
+  .gallery-thumbnail {
+    transition: none;
+  }
 }

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Download, FileText, Loader } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { personalInfo, educationData, careerData } from "../../data/biodata";
+import { personalInfo, educationData, careerData } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function PDFDownload() {

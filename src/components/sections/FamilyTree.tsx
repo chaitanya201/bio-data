@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { familyInfo, personalInfo } from "../../data/biodata";
+import { familyInfo, personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 
 const connections = [
@@ -35,29 +35,12 @@ export default function FamilyTree() {
       color: "#8B5CF6",
     },
     {
-      id: "mgf",
-      name: familyInfo.maternal.grandfather,
-      role: r.maternalGrandfather,
-      level: 0,
-      col: 3,
-      color: "#06B6D4",
-    },
-    {
-      id: "mgm",
-      name: familyInfo.maternal.grandmother,
-      role: r.maternalGrandmother,
-      level: 0,
-      col: 4,
-      color: "#0EA5E9",
-    },
-    {
       id: "father",
       name: familyInfo.father.name,
       role: r.father,
       level: 1,
       col: 1,
       color: "#3B82F6",
-      photo: familyInfo.father.photo,
     },
     {
       id: "mother",
@@ -66,7 +49,6 @@ export default function FamilyTree() {
       level: 1,
       col: 3,
       color: "#EC4899",
-      photo: familyInfo.mother.photo,
     },
     {
       id: "groom",
@@ -75,7 +57,6 @@ export default function FamilyTree() {
       level: 2,
       col: 2,
       color: "#F59E0B",
-      photo: personalInfo.photo,
     },
     {
       id: "sister",
@@ -84,7 +65,6 @@ export default function FamilyTree() {
       level: 2,
       col: 4,
       color: "#10B981",
-      photo: familyInfo.siblings[0].photo,
     },
   ];
 
@@ -141,28 +121,25 @@ export default function FamilyTree() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     // viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: ni * 0.08 }}
-                    className="glass rounded-2xl p-3 text-center w-36 flex flex-col items-center gap-y-3"
+                    className="glass rounded-2xl p-4 text-center w-44 flex flex-col items-center gap-y-3"
                     style={{ borderColor: node.color + "40" }}
                   >
-                    {"photo" in node && node.photo ? (
-                      <div
-                        className="w-12 h-12 rounded-full overflow-hidden mx-auto mb-2 border-2"
-                        style={{ borderColor: node.color }}
-                      >
-                        <img
-                          src={node.photo}
-                          alt={node.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-lg"
-                        style={{ backgroundColor: node.color + "20" }}
-                      >
-                        👤
-                      </div>
-                    )}
+                    <div
+                      className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-sm font-bold"
+                      style={{
+                        backgroundColor: node.color + "20",
+                        color: node.color,
+                        border: `1px solid ${node.color}50`,
+                      }}
+                      aria-hidden="true"
+                    >
+                      {node.name
+                        .split(" ")
+                        .filter(Boolean)
+                        .slice(0, 2)
+                        .map((part) => part[0])
+                        .join("")}
+                    </div>
                     <p className="text-white text-xs font-bold leading-snug">
                       {node.name.split(" ").slice(-1)}
                     </p>
@@ -195,32 +172,25 @@ export default function FamilyTree() {
                       whileInView={{ opacity: 1, y: 0 }}
                       // viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: ni * 0.1 }}
-                      className="glass rounded-2xl p-4 text-center w-44 hover:border-white/20 transition-all duration-300 group"
+                      className="glass rounded-2xl p-5 text-center w-52 hover:border-white/20 transition-all duration-300 group"
                       style={{ borderColor: node.color + "40" }}
                     >
-                      {"photo" in node && node.photo ? (
-                        <div
-                          className="w-14 h-14 rounded-full overflow-hidden mx-auto mb-2 border-2 transition-transform group-hover:scale-105"
-                          style={{ borderColor: node.color }}
-                        >
-                          <img
-                            src={node.photo}
-                            alt={node.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-xl"
-                          style={{
-                            backgroundColor: node.color + "20",
-                            border: `2px solid ${node.color}40`,
-                          }}
-                        >
-                          👤
-                        </div>
-                      )}
+                      <div
+                        className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-base font-bold transition-transform group-hover:scale-105"
+                        style={{
+                          backgroundColor: node.color + "20",
+                          color: node.color,
+                          border: `2px solid ${node.color}40`,
+                        }}
+                        aria-hidden="true"
+                      >
+                        {node.name
+                          .split(" ")
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .map((part) => part[0])
+                          .join("")}
+                      </div>
                       <p className="text-white text-sm font-bold leading-snug">
                         {node.name.split(" ").slice(0, 2).join(" ")}
                       </p>

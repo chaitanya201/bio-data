@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { horoscopeData } from "../../data/biodata";
+import { horoscopeData } from "../../data/siteContent";
 import { Star, Moon, Sun, Shield } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 
