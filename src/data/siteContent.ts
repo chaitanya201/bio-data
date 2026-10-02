@@ -419,7 +419,7 @@ export const lifeTimelineData = [
     description:
       "Looking forward to finding the right life partner to begin a new journey.",
 
-    icon: "❤️",
+    icon: "",
   },
 ];
 
@@ -556,7 +556,7 @@ Compatibility in mindset matters to me more than having identical interests. I w
     },
 
     {
-      icon: "❤️",
+      icon: "",
 
       title: "Emotional Compatibility",
 
@@ -1164,7 +1164,7 @@ export const en = {
   footer: {
     tagline: "Software Engineer · Lifelong Learner",
 
-    credit: "Designed with ❤️ for a new beginning · Maharashtra, India · 2026",
+    credit: "Designed with  for a new beginning · Maharashtra, India · 2026",
   },
 };
 
@@ -1485,7 +1485,7 @@ export const mr: Translations = {
       placeOfBirth: "जन्मस्थळ",
       photos: "छायाचित्रे",
       marriageBiodata: "विवाह बायोडाटा",
-      footer: "महाराष्ट्र, भारत · नव्या सुरुवातीसाठी ❤️ ने बनवले",
+      footer: "महाराष्ट्र, भारत · नव्या सुरुवातीसाठी  ने बनवले",
       fullName: "पूर्ण नाव",
       dateOfBirth: "जन्मतारीख",
       age: "वय",
@@ -1509,7 +1509,7 @@ export const mr: Translations = {
 
   footer: {
     tagline: "सॉफ्टवेअर अभियंता · आयुष्यभर शिकणारा",
-    credit: "नव्या सुरुवातीसाठी ❤️ ने बनवले · महाराष्ट्र, भारत · २०२६",
+    credit: "नव्या सुरुवातीसाठी  ने बनवले · महाराष्ट्र, भारत · २०२६",
   },
 };
 
