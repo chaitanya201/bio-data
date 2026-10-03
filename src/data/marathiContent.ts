@@ -20,7 +20,7 @@ export const marathiContent = {
   profile: {
     fullName: "चैतन्य सुजित सावंत",
     shortName: "चैतन्य",
-    tagline: "सॉफ्टवेअर अभियंता · आयुष्यभर शिकणारा",
+    tagline: "सॉफ्टवेअर अभियंता · Encardio Rite",
     dateOfBirth: "५ जुलै २००१",
     age: "२५",
     height: "६'१\"",

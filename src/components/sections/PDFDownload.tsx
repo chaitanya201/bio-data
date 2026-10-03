@@ -414,12 +414,8 @@ export default function PDFDownload() {
           </div>
           <div style="display:flex;gap:16px;align-items:flex-start;">
             <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
-              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:220px;object-fit:cover;border-radius:12px;margin:0 auto;" />
+              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:420px;object-fit:cover;border-radius:12px;margin:0 auto;" />
               <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
-            </div>
-            <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
-              <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:100%;height:220px;object-fit:cover;border-radius:12px;background:rgba(255,255,255,0.04);margin:0 auto;" />
-              <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.kundli)}</div>
             </div>
           </div>
         </section>`,

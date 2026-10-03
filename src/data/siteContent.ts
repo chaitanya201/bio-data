@@ -3,7 +3,7 @@ export const personalInfo = {
 
   shortName: "Chaitanya",
 
-  tagline: "Software Engineer · Lifelong Learner",
+  tagline: "Software Engineer · Encardio Rite",
 
   dateOfBirth: "5 July 2001",
 
@@ -747,7 +747,7 @@ export const en = {
 
     greeting: "Hello, I'm",
 
-    tagline: "Software Engineer · Lifelong Learner",
+    tagline: "Software Engineer · Encardio Rite",
 
     cta1: "Explore My Profile",
 
@@ -1222,7 +1222,7 @@ export const en = {
   },
 
   footer: {
-    tagline: "Software Engineer · Lifelong Learner",
+    tagline: "Software Engineer · Encardio Rite",
 
     credit: "Designed with  for a new beginning · Maharashtra, India · 2026",
   },
@@ -1262,7 +1262,7 @@ export const mr: Translations = {
   hero: {
     badge: "विवाह बायोडाटा",
     greeting: "नमस्कार, मी आहे",
-    tagline: "सॉफ्टवेअर अभियंता · आयुष्यभर शिकणारा",
+    tagline: "सॉफ्टवेअर अभियंता · Encardio Rite",
     cta1: "माझी माहिती पहा",
     cta2: "संपर्क साधा",
     statAge: `${personalInfo.age} वर्षे`,
@@ -1577,7 +1577,7 @@ export const mr: Translations = {
   },
 
   footer: {
-    tagline: "सॉफ्टवेअर अभियंता · आयुष्यभर शिकणारा",
+    tagline: "सॉफ्टवेअर अभियंता · Encardio Rite",
     credit: "नव्या सुरुवातीसाठी  ने बनवले · महाराष्ट्र, भारत · २०२६",
   },
 };
