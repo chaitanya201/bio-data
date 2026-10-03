@@ -90,9 +90,9 @@ export const familyInfo = {
   },
 
   maternal: {
-    grandfather: "Ramchandra Vittalrao Rananavare",
+    grandfather: "Ramchandra Vittalrao Ranaware",
 
-    grandmother: "Vijaymala Ramchandra Rananavare",
+    grandmother: "Vijaymala Ramchandra Ranaware",
   },
 };
 
@@ -148,12 +148,12 @@ export const relativeInfoData = [
     occupation: null,
   },
   {
-    name: "Ambadas Ramchrandra Rananavare",
+    name: "Ambadas Ramchrandra Ranaware",
     relation: "Maternal Uncle",
     occupation: "Nimsakhar",
   },
   {
-    name: "Prakash Ramchrandra Rananavare",
+    name: "Prakash Ramchrandra Ranaware",
     relation: "Maternal Uncle",
     occupation: "Nimsakhar",
   },
@@ -659,16 +659,6 @@ Compatibility in mindset matters to me more than having identical interests. I w
       description:
         "Curious about the world and interested in learning, science, technology, or understanding how things work.",
     },
-
-    {
-      icon: "🙏",
-
-      title: "Values & Spirituality",
-
-      description:
-        "Has her own values and beliefs, is respectful of culture and traditions, and is open to discussing spirituality and what it means personally.",
-    },
-
     {
       icon: "🔐",
 
@@ -676,15 +666,6 @@ Compatibility in mindset matters to me more than having identical interests. I w
 
       description:
         "Believes that a strong relationship is built on honesty and transparency about important aspects of life, including past relationships, friendships, social media, health, and other matters that may affect the relationship.",
-    },
-
-    {
-      icon: "🚭",
-
-      title: "Health & Habits",
-
-      description:
-        "Maintains a lifestyle compatible with each other's health and personal values, including openness about habits such as smoking, drinking, and other lifestyle choices.",
     },
 
     {
@@ -1141,10 +1122,9 @@ export const en = {
       address: "Address",
     },
 
-    lookingForward: "Looking Forward to Meeting You",
+    lookingForward: "",
 
-    closingPara:
-      "Whether you're the potential life partner or a family member exploring this profile — thank you for taking the time. Every great story begins with a conversation. Let's start ours.",
+    closingPara: "",
 
     callNow: "Call Now",
 
@@ -1514,8 +1494,8 @@ export const mr: Translations = {
       "सई सुजित  सुजित सावंत — बहीण · सॉफ्टवेअर अभियंता",
       "बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
       "रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
-      "रामचंद्र रणनवरे — आईकडील आजोबा",
-      "वसुधा रणनवरे — आईकडील आजी",
+      "रामचंद्र रनवरे — आईकडील आजोबा",
+      "वसुधा रनवरे — आईकडील आजी",
     ],
   },
 
@@ -1530,9 +1510,8 @@ export const mr: Translations = {
       linkedin: "लिंक्डइन",
       address: "पत्ता",
     },
-    lookingForward: "तुम्हाला भेटण्याची आतुरतेने वाट पाहतो",
-    closingPara:
-      "तुम्ही संभाव्य जीवनसाथी असाल किंवा कुटुंबातील सदस्य म्हणून ही माहिती पाहत असाल — वेळ दिल्याबद्दल धन्यवाद. प्रत्येक सुंदर कहाणी एका संवादाने सुरू होते. चला, आपली सुरुवात करूया.",
+    lookingForward: "",
+    closingPara: "",
     callNow: "आता कॉल करा",
     sendEmail: "ईमेल पाठवा",
   },
