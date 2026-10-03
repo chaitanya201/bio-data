@@ -13,6 +13,21 @@ export default function HoroscopeCard() {
   const [flipped, setFlipped] = useState(false);
   const frontItems = [
     { icon: Star, label: t.horoscope.rashiLabel, value: horoscope.rashi },
+    {
+      icon: Star,
+      label: t.horoscope.familyDeityLabel,
+      value: horoscope.familyDeity ?? "-",
+    },
+    {
+      icon: Star,
+      label: t.horoscope.daivakLabel,
+      value: horoscope.daivak ?? "-",
+    },
+    {
+      icon: Star,
+      label: t.horoscope.gotraLabel,
+      value: horoscope.gotra ?? "-",
+    },
   ];
 
   return (

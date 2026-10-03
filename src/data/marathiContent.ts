@@ -33,28 +33,47 @@ export const marathiContent = {
     address: "आंबेगाव बुद्रुक, पुणे, महाराष्ट्र — ४११०४६",
     currentRole: "वरिष्ठ सॉफ्टवेअर अभियंता",
     currentEmployer: "Encardio Rite",
+    familyDeity: "कोल्हापूर ज्योतिबा",
+    daivak: "भरद्वाज पक्षी",
+    gotra: "दुर्वासा ऋषी",
   },
 
   family: {
     father: { name: "सुजित बापूसाहेब सावंत", occupation: "शेतकरी" },
     mother: { name: "सुमित्रा सुजित सावंत", occupation: "गृहिणी" },
-    sister: { name: "सई सावंत", occupation: "सॉफ्टवेअर अभियंता" },
+    sister: { name: "सई सुजित सावंत", occupation: "सॉफ्टवेअर अभियंता" },
+    paternalUncle: {
+      name: "अविनाश बापूसाहेब सावंत",
+      occupation: "",
+    },
+    paternalAunt: {
+      name: "राजश्री अविनाश सावंत",
+      occupation: "गृहिणी",
+    },
     paternal: {
       grandfather: "बापूसाहेब गणेश सावंत",
       grandmother: "रंजना बापूसाहेब सावंत",
     },
     maternal: {
-      grandfather: "रामचंद्र रणनवरे",
-      grandmother: "वसुधा रणनवरे",
+      grandfather: "रामचंद्र विट्ठलराव रणनवरे",
+      grandmother: "विजयमाला रामचंद्र रणनवरे",
     },
     relativeItems: [
       "सुजित बापूसाहेब सावंत — वडील · शेतकरी",
       "सुमित्रा सुजित सावंत — आई · गृहिणी",
-      "सई सावंत — बहीण · सॉफ्टवेअर अभियंता",
+      "अविनाश बापूसाहेब सावंत — चुलते",
+      "राजश्री अविनाश सावंत — चुलती · गृहिणी",
+      "सई सुजित सावंत — बहीण · सॉफ्टवेअर अभियंता",
       "बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
       "रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
-      "रामचंद्र रणनवरे — आईकडील आजोबा",
-      "वसुधा रणनवरे — आईकडील आजी",
+      "रामचंद्र विट्ठलराव रणनवरे — आईकडील आजोबा",
+      "विजयमाला रामचंद्र रणनवरे — आईकडील आजी",
+      "अंबादास रामचंद्र रणनवरे — मामा · निमसाकर",
+      "प्रकाश रामचंद्र रणनवरे — मामा · निमसाकर",
+      "रुपाली दादासाहेब यादव — मावशी · कडेपुर",
+      "दिपाली गोरख वाबळे — मावशी · बारामती",
+      "अर्चना अभिमन्यू माने —आत्या · गिरजनी",
+      "मीनाक्षी विठ्ठल फडतरे —आत्या · भगतवाडी, अकलूज",
     ],
   },
 
@@ -62,6 +81,11 @@ export const marathiContent = {
     dob: "५ जुलै २००१",
     tob: "रात्री २:४५",
     pob: "अकलूज, महाराष्ट्र, भारत",
+    familyDeity: "कोल्हापूर ज्योतिबा",
+    daivak: "महापक्षी (भरद्वाज पक्षी)",
+    gotra: "दुर्वासा ऋषी",
+    summary:
+      "धनु राशीत जन्म, कोल्हापूर ज्योतिबा या कुलदैवतांचा आदर, महापक्षी (भरद्वाज पक्षी) दैवक आणि दुर्वासा ऋषी गोत्र — यावर आधारित संतुलित, आध्यात्मिक आणि कुटुंबाभिमुख स्वभाव.",
   },
 
   personality: {
@@ -109,7 +133,9 @@ export const marathiContent = {
 
   dayInLife: dayInLifeData.map((item, i) => ({
     ...item,
-    time: mrDigits(item.time).replace("AM", "सकाळी").replace("PM", "संध्याकाळी"),
+    time: mrDigits(item.time)
+      .replace("AM", "सकाळी")
+      .replace("PM", "संध्याकाळी"),
     title: [
       "सकाळचा व्यायाम",
       "पौष्टिक नाश्ता",
@@ -187,7 +213,11 @@ export const marathiContent = {
   career: {
     jobs: careerData.map((item, i) => ({
       ...item,
-      year: ["जुलै २०२३ - नोव्हेंबर २०२५", "नोव्हेंबर २०२५ - जुलै २०२६", "जुलै २०२६ - सध्या"][i],
+      year: [
+        "जुलै २०२३ - नोव्हेंबर २०२५",
+        "नोव्हेंबर २०२५ - जुलै २०२६",
+        "जुलै २०२६ - सध्या",
+      ][i],
       role: [
         "सॉफ्टवेअर अभियंता",
         "सॉफ्टवेअर अभियंता",
@@ -211,10 +241,22 @@ export const marathiContent = {
         ? "उत्कृष्ट कामगिरी पुरस्कार"
         : item.title,
     fullTitle: item.fullTitle
-      .replace("Certified Kubernetes Administrator", "प्रमाणित Kubernetes प्रशासक")
-      .replace("Certified Kubernetes Application Developer", "प्रमाणित Kubernetes अॅप्लिकेशन डेव्हलपर")
-      .replace("Kubernetes and Cloud Native Associate", "Kubernetes आणि Cloud Native असोसिएट")
-      .replace("Kubernetes and Cloud Native Security Associate", "Kubernetes आणि Cloud Native सुरक्षा असोसिएट")
+      .replace(
+        "Certified Kubernetes Administrator",
+        "प्रमाणित Kubernetes प्रशासक",
+      )
+      .replace(
+        "Certified Kubernetes Application Developer",
+        "प्रमाणित Kubernetes अॅप्लिकेशन डेव्हलपर",
+      )
+      .replace(
+        "Kubernetes and Cloud Native Associate",
+        "Kubernetes आणि Cloud Native असोसिएट",
+      )
+      .replace(
+        "Kubernetes and Cloud Native Security Associate",
+        "Kubernetes आणि Cloud Native सुरक्षा असोसिएट",
+      )
       .replace("Best Performance of the Year", "वर्षातील उत्कृष्ट कामगिरी"),
     issuer: item.issuer
       .replace("Linux Foundation", "Linux Foundation")

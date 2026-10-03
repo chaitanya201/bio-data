@@ -39,6 +39,9 @@ export const personalInfo = {
 
   photo:
     "https\://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+  familyDeity: "Kolhapur Jotiba",
+  daivak: "Greater Coucal (Bharadwaj Pakshi)",
+  gotra: "Durvasa Rushi",
 };
 
 export const familyInfo = {
@@ -60,13 +63,25 @@ export const familyInfo = {
 
   siblings: [
     {
-      name: "Sayee Sawant",
+      name: "Sayee Sujit Sawant",
 
       relation: "Sister",
 
       occupation: "Software Engineer",
     },
   ],
+
+  paternalUncle: {
+    name: "Avinash Bapusaheb Sawant",
+    relation: "Paternal Uncle",
+    occupation: "",
+  },
+
+  paternalAunt: {
+    name: "Rajashri Avinash Sawant",
+    relation: "Paternal Aunt",
+    occupation: "Homemaker",
+  },
 
   paternal: {
     grandfather: "Bapusaheb Ganesh Sawant",
@@ -75,9 +90,9 @@ export const familyInfo = {
   },
 
   maternal: {
-    grandfather: "Ramchandra Rananavare",
+    grandfather: "Ramchandra Vittalrao Rananavare",
 
-    grandmother: "Vasudha Rananavare",
+    grandmother: "Vijaymala Ramchandra Rananavare",
   },
 };
 
@@ -88,9 +103,24 @@ export const relativeInfoData = [
     occupation: familyInfo.father.occupation,
   },
   {
+    name: familyInfo.father.name,
+    relation: familyInfo.father.relation,
+    occupation: familyInfo.father.occupation,
+  },
+  {
     name: familyInfo.mother.name,
     relation: familyInfo.mother.relation,
     occupation: familyInfo.mother.occupation,
+  },
+  {
+    name: familyInfo.paternalUncle.name,
+    relation: familyInfo.paternalUncle.relation,
+    occupation: familyInfo.paternalUncle.occupation,
+  },
+  {
+    name: familyInfo.paternalAunt.name,
+    relation: familyInfo.paternalAunt.relation,
+    occupation: familyInfo.paternalAunt.occupation,
   },
   ...familyInfo.siblings.map((sibling) => ({
     name: sibling.name,
@@ -116,6 +146,36 @@ export const relativeInfoData = [
     name: familyInfo.maternal.grandmother,
     relation: "Maternal Grandmother",
     occupation: null,
+  },
+  {
+    name: "Ambadas Ramchrandra Rananavare",
+    relation: "Maternal Uncle",
+    occupation: "Nimsakhar",
+  },
+  {
+    name: "Prakash Ramchrandra Rananavare",
+    relation: "Maternal Uncle",
+    occupation: "Nimsakhar",
+  },
+  {
+    name: "Rupali Dadashab Yadav",
+    relation: "Maternal Aunt",
+    occupation: "Kadepur",
+  },
+  {
+    name: "Dipali Gorakh Wabale",
+    relation: "Maternal Aunt",
+    occupation: "Baramati",
+  },
+  {
+    name: "Archana Abhimanyu Mane",
+    relation: "Paternal Aunt",
+    occupation: "Girjani",
+  },
+  {
+    name: "Minakshi Vittal Fadtare",
+    relation: "Paternal Aunt",
+    occupation: "Bhagatwadi, Akluj",
   },
 ] as const;
 
@@ -649,7 +709,11 @@ export const horoscopeData = {
 
   kundaliPdf: null as string | null,
 
-  summary: "",
+  summary:
+    "Born under Dhanu Rashi with reverence for Kolhapur Jotiba as the family deity, the Greater Coucal (Bharadwaj Pakshi) daivak, and the Durvasa Rushi gotra—reflecting a grounded, spiritually rooted, and family-oriented nature.",
+  familyDeity: personalInfo.familyDeity,
+  daivak: personalInfo.daivak,
+  gotra: personalInfo.gotra,
 };
 
 export const media = {
@@ -836,6 +900,8 @@ export const en = {
       groom: "Groom",
 
       sister: "Sister",
+      paternalUncle: "Paternal Uncle",
+      paternalAunt: "Paternal Aunt",
     },
   },
 
@@ -1013,6 +1079,12 @@ export const en = {
 
     rashiLabel: "Rashi",
 
+    familyDeityLabel: "Family Deity",
+
+    daivakLabel: "Daivak",
+
+    gotraLabel: "Gotra",
+
     tobLabel: "Time of Birth",
 
     pobLabel: "Place of Birth",
@@ -1023,7 +1095,8 @@ export const en = {
 
     rashiChip: "Dhanu Rashi",
 
-    summary: "",
+    summary:
+      "Born under Dhanu Rashi with reverence for Kolhapur Jotiba as the family deity, the Greater Coucal (Bharadwaj Pakshi) daivak, and the Durvasa Rushi gotra—reflecting a grounded, spiritually rooted, and family-oriented nature.",
   },
 
   partner: {
@@ -1282,6 +1355,8 @@ export const mr: Translations = {
       mother: "आई",
       groom: "वर",
       sister: "बहीण",
+      paternalUncle: "चुलते",
+      paternalAunt: "चुलती",
     },
   },
 
@@ -1401,12 +1476,16 @@ export const mr: Translations = {
     clickHint: "संपूर्ण तपशील पाहण्यासाठी कार्डवर क्लिक करा",
     birthDetails: "जन्म तपशील",
     rashiLabel: "राशी",
+    familyDeityLabel: "कुलदैवत",
+    daivakLabel: "दैवक",
+    gotraLabel: "गोत्र",
     tobLabel: "जन्म वेळ",
     pobLabel: "जन्मस्थान",
     backTitle: "ज्योतिषशास्त्रीय सारांश",
     tapReveal: "✦ सविस्तर सारांश पाहण्यासाठी टॅप करा ✦",
     rashiChip: "धनु राशी",
-    summary: "",
+    summary:
+      "धनु राशीत जन्म, कोल्हापूर ज्योतिबा या कुलदैवतांचा आदर, महापक्षी (भरद्वाज पक्षी) दैवक आणि दुर्वासा ऋषी गोत्र — यावर आधारित संतुलित, आध्यात्मिक आणि कुटुंबाभिमुख स्वभाव.",
   },
 
   partner: {
@@ -1418,14 +1497,14 @@ export const mr: Translations = {
   },
 
   relativeInfo: {
-    badge: "कौटुंबिक वर्तुळ",
+    badge: "कौटुंबिक परिवार",
     title: "नातेवाईक",
     titleAccent: "माहिती",
     description: "जवळच्या कौटुंबिक नातेसंबंधांची आणि पार्श्वभूमीची साधी यादी.",
     items: [
       "सुजित बापूसाहेब सावंत — वडील · शेतकरी",
       "सुमित्रा सुजित सावंत — आई · गृहिणी",
-      "सई सावंत — बहीण · सॉफ्टवेअर अभियंता",
+      "सई सुजित  सुजित सावंत — बहीण · सॉफ्टवेअर अभियंता",
       "बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
       "रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
       "रामचंद्र रणनवरे — आईकडील आजोबा",
@@ -1478,7 +1557,7 @@ export const mr: Translations = {
       education: "शिक्षण",
       career: "करिअर",
       contact: "संपर्क",
-      relativeDetails: "कौटुंबिक वर्तुळ",
+      relativeDetails: "कौटुंबिक परिवार",
       achievements: "उपलब्धी",
       horoscope: "कुंडली",
       timeOfBirth: "जन्मवेळ",

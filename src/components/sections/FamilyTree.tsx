@@ -53,6 +53,22 @@ export default function FamilyTree() {
       color: "#EC4899",
     },
     {
+      id: "paternalUncle",
+      name: family?.paternalUncle.name ?? familyInfo.paternalUncle.name,
+      role: r.paternalUncle,
+      level: 1,
+      col: 2,
+      color: "#10B981",
+    },
+    {
+      id: "paternalAunt",
+      name: family?.paternalAunt.name ?? familyInfo.paternalAunt.name,
+      role: r.paternalAunt,
+      level: 1,
+      col: 3,
+      color: "#8B5CF6",
+    },
+    {
       id: "groom",
       name: isMarathi ? marathiContent.profile.fullName : personalInfo.fullName,
       role: r.groom,
@@ -96,7 +112,7 @@ export default function FamilyTree() {
         </motion.div>
 
         {/* Mobile: vertical stacked */}
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden space-y-4 pt-16">
           {[
             {
               title: t.familyTree.grandparents,
@@ -126,22 +142,6 @@ export default function FamilyTree() {
                     className="glass rounded-2xl p-4 text-center w-44 flex flex-col items-center gap-y-3"
                     style={{ borderColor: node.color + "40" }}
                   >
-                    <div
-                      className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-sm font-bold"
-                      style={{
-                        backgroundColor: node.color + "20",
-                        color: node.color,
-                        border: `1px solid ${node.color}50`,
-                      }}
-                      aria-hidden="true"
-                    >
-                      {node.name
-                        .split(" ")
-                        .filter(Boolean)
-                        .slice(0, 2)
-                        .map((part) => part[0])
-                        .join("")}
-                    </div>
                     <p className="text-white text-xs font-bold leading-snug">
                       {node.name}
                     </p>
@@ -177,22 +177,6 @@ export default function FamilyTree() {
                       className="glass rounded-2xl p-5 text-center w-52 hover:border-white/20 transition-all duration-300 group"
                       style={{ borderColor: node.color + "40" }}
                     >
-                      <div
-                        className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-base font-bold transition-transform group-hover:scale-105"
-                        style={{
-                          backgroundColor: node.color + "20",
-                          color: node.color,
-                          border: `2px solid ${node.color}40`,
-                        }}
-                        aria-hidden="true"
-                      >
-                        {node.name
-                          .split(" ")
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((part) => part[0])
-                          .join("")}
-                      </div>
                       <p className="text-white text-sm font-bold leading-snug">
                         {node.name}
                       </p>
