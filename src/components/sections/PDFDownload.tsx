@@ -208,17 +208,19 @@ export default function PDFDownload() {
 
       const mkRow = (label: string, value: string) =>
         `<tr>
-          <td style="padding:8px 14px;color:#9CA3AF;font-size:12px;white-space:nowrap;width:160px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;">${escapeHtml(label)}</td>
-          <td style="padding:8px 14px;color:#E2E8F0;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.05);">${escapeHtml(value)}</td>
+          <td style="padding:10px 14px;color:#A5B4FC;font-size:11px;white-space:nowrap;width:168px;border-bottom:1px solid rgba(148,163,184,0.18);vertical-align:top;font-weight:600;letter-spacing:0.04em;">${escapeHtml(label)}</td>
+          <td style="padding:10px 14px;color:#E5E7EB;font-size:12px;border-bottom:1px solid rgba(148,163,184,0.18);line-height:1.45;">${escapeHtml(value)}</td>
         </tr>`;
 
       const mkSection = (title: string, rows: string) =>
-        `<section style="margin:0 28px 22px;break-inside:avoid;page-break-inside:avoid;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
-            <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(title)}</span>
+        `<section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
+            <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
-          <table style="width:100%;border-collapse:collapse;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;">${rows}</table>
+          <div style="background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,41,59,0.84));border:1px solid rgba(245,158,11,0.2);border-radius:16px;overflow:hidden;box-shadow:0 12px 28px rgba(15,23,42,0.38);">
+            <table style="width:100%;border-collapse:collapse;">${rows}</table>
+          </div>
         </section>`;
 
       const familyRows = isMarathi
@@ -278,10 +280,12 @@ export default function PDFDownload() {
         )
         .join("");
 
-      const headerHtml = `<header style="background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%);padding:36px 28px 28px;text-align:center;margin-bottom:28px;">
-            <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">${escapeHtml(profile.fullName)}</div>
-            <div style="font-size:13px;color:#FDE68A;margin-bottom:8px;">${escapeHtml(profile.tagline)}</div>
-            <div style="display:inline-block;background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:20px;font-size:10px;color:#BFDBFE;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.marriageBiodata)}</div>
+      const headerHtml = `<header style="background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 54%,#F59E0B 100%);padding:28px 28px 22px;text-align:center;margin:0 18px 18px;border-radius:22px;box-shadow:0 18px 38px rgba(37,99,235,0.22);border:1px solid rgba(255,255,255,0.08);">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.12);color:#FDE68A;font-size:20px;font-weight:800;margin-bottom:12px;border:1px solid rgba(255,255,255,0.18);">C</div>
+            <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.6px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
+            <div style="font-size:13px;color:#FDE68A;margin-bottom:12px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
+            <div style="display:inline-block;background:rgba(15,23,42,0.32);padding:7px 18px;border-radius:999px;font-size:10px;color:#E0F2FE;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);">${escapeHtml(s.marriageBiodata)}</div>
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.14);font-size:11px;color:#DBEAFE;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
           </header>`;
 
       const sectionsHtml = [
@@ -307,37 +311,53 @@ export default function PDFDownload() {
           [
             mkRow(s.phone, personalInfo.phone),
             mkRow(s.email, personalInfo.email),
+            mkRow(s.website, personalInfo.websiteUrl),
             mkRow(s.linkedin, personalInfo.linkedin),
             mkRow(s.address, profile.address),
           ].join("")
         ),
         mkSection(s.relativeDetails, relativeRows),
         mkSection(s.achievements, achievementRows),
-        mkSection(
-          s.horoscope,
-          [
+        (() => {
+          const horoscopeTable = [
             mkRow(s.rashi, isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi),
+            mkRow(s.familyDeity, localizedHoroscope.familyDeity || "-"),
+            mkRow(s.daivak, localizedHoroscope.daivak || "-"),
+            mkRow(s.gotra, localizedHoroscope.gotra || "-"),
             mkRow(s.timeOfBirth, localizedHoroscope.tob),
             mkRow(s.placeOfBirth, localizedHoroscope.pob),
-          ].join("")
-        ),
+          ].join("");
+
+          return `
+            <section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
+                <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
+              </div>
+              <div style="background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(17,24,39,0.84));border:1px solid rgba(245,158,11,0.2);border-radius:16px;overflow:hidden;box-shadow:0 12px 28px rgba(15,23,42,0.38);">
+                <table style="width:100%;border-collapse:collapse;">${horoscopeTable}</table>
+                <div style="padding:12px 14px 14px;border-top:1px solid rgba(148,163,184,0.18);background:rgba(245,158,11,0.06);color:#F9FAFB;font-size:12px;line-height:1.6;">${escapeHtml(localizedHoroscope.summary || "")}</div>
+              </div>
+            </section>
+          `;
+        })(),
         `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <div style="width:3px;height:16px;background:#F59E0B;border-radius:2px;flex-shrink:0;"></div>
-            <span style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
+            <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
           </div>
           <div style="display:flex;gap:16px;align-items:flex-start;">
-            <div style="flex:1;min-width:0;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
-              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px;margin:0 auto;" />
-              <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.groomPhoto)}</div>
+            <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
+              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:220px;object-fit:cover;border-radius:12px;margin:0 auto;" />
+              <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
             </div>
-            <div style="flex:1;min-width:0;background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;text-align:center;">
-              <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.04);margin:0 auto;" />
-              <div style="color:#E2E8F0;font-size:11px;font-weight:600;margin-top:8px;">${escapeHtml(s.kundli)}</div>
+            <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
+              <img crossorigin="anonymous" src="${escapeHtml(media.pdfImages.kundli)}" alt="${escapeHtml(s.kundli)}" style="display:block;width:100%;height:220px;object-fit:cover;border-radius:12px;background:rgba(255,255,255,0.04);margin:0 auto;" />
+              <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.kundli)}</div>
             </div>
           </div>
         </section>`,
-        `<footer style="text-align:center;padding:16px 28px 28px;color:#6B7280;font-size:10px;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
+        `<footer style="text-align:center;padding:14px 28px 24px;color:#D1D5DB;font-size:10px;letter-spacing:0.06em;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
       ];
 
       container = document.createElement("div");

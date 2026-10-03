@@ -1204,6 +1204,12 @@ export const en = {
 
       timeOfBirth: "Time of Birth",
 
+      familyDeity: "Family Deity",
+
+      daivak: "Daivak",
+
+      gotra: "Gotra",
+
       placeOfBirth: "Place of Birth",
 
       photos: "Photos",
@@ -1227,6 +1233,7 @@ export const en = {
       sibling: "Sibling",
       phone: "Phone",
       email: "Email",
+      website: "Website",
       linkedin: "LinkedIn",
       address: "Address",
       groomPhoto: "Groom",
@@ -1561,6 +1568,9 @@ export const mr: Translations = {
       achievements: "उपलब्धी",
       horoscope: "कुंडली",
       timeOfBirth: "जन्मवेळ",
+      familyDeity: "कुलदैवत",
+      daivak: "दैवक",
+      gotra: "गोत्र",
       placeOfBirth: "जन्मस्थळ",
       photos: "छायाचित्रे",
       marriageBiodata: "विवाह बायोडाटा",
@@ -1579,6 +1589,7 @@ export const mr: Translations = {
       sibling: "भावंड",
       phone: "दूरध्वनी",
       email: "ईमेल",
+      website: "वेबसाइट",
       linkedin: "लिंक्डइन",
       address: "पत्ता",
       groomPhoto: "वर",
