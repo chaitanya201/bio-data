@@ -79,7 +79,7 @@ function ConfettiCelebration() {
           -particle.size / 2,
           -particle.size / 4,
           particle.size,
-          particle.size / 2
+          particle.size / 2,
         );
         context.restore();
       });
@@ -130,7 +130,11 @@ function DownloadActionButton({
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.97 }}
       animate={floating ? { y: [0, -4, 0] } : undefined}
-      transition={floating ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" } : undefined}
+      transition={
+        floating
+          ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+          : undefined
+      }
       className={`flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium shadow-lg shadow-amber-400/25 transition-all disabled:cursor-wait disabled:opacity-70 ${
         floating ? "fixed bottom-6 right-4 z-50 sm:right-6" : "px-8"
       }`}
@@ -173,11 +177,13 @@ export default function PDFDownload() {
       const occupationLabel = (occupation: string | null) => {
         if (!occupation) return "";
         if (!isMarathi) return occupation;
-        return {
-          Farmer: "शेतकरी",
-          Homemaker: "गृहिणी",
-          "Software Engineer": "सॉफ्टवेअर अभियंता",
-        }[occupation] ?? occupation;
+        return (
+          {
+            Farmer: "शेतकरी",
+            Homemaker: "गृहिणी",
+            "Software Engineer": "सॉफ्टवेअर अभियंता",
+          }[occupation] ?? occupation
+        );
       };
 
       const relativeLabel = (relation: string) => {
@@ -194,9 +200,15 @@ export default function PDFDownload() {
         return relationMap[relation] ?? relation;
       };
 
-      const localizedEducation = isMarathi ? marathiContent.education : educationData;
-      const localizedCareer = isMarathi ? marathiContent.career.jobs : careerData;
-      const localizedAchievements = isMarathi ? marathiContent.achievements : achievementsData;
+      const localizedEducation = isMarathi
+        ? marathiContent.education
+        : educationData;
+      const localizedCareer = isMarathi
+        ? marathiContent.career.jobs
+        : careerData;
+      const localizedAchievements = isMarathi
+        ? marathiContent.achievements
+        : achievementsData;
       const profile = isMarathi ? marathiContent.profile : personalInfo;
       const localizedHoroscope = isMarathi
         ? {
@@ -225,19 +237,65 @@ export default function PDFDownload() {
 
       const familyRows = isMarathi
         ? [
-            mkRow(roles.father, `${marathiContent.family.father.name} · ${marathiContent.family.father.occupation}`),
-            mkRow(roles.mother, `${marathiContent.family.mother.name} · ${marathiContent.family.mother.occupation}`),
-            mkRow(roles.sister, `${marathiContent.family.sister.name} · ${marathiContent.family.sister.occupation}`),
-            mkRow(roles.paternalGrandfather, marathiContent.family.paternal.grandfather),
-            mkRow(roles.paternalGrandmother, marathiContent.family.paternal.grandmother),
-            mkRow(roles.maternalGrandfather, marathiContent.family.maternal.grandfather),
-            mkRow(roles.maternalGrandmother, marathiContent.family.maternal.grandmother),
+            mkRow(
+              roles.father,
+              `${marathiContent.family.father.name} · ${marathiContent.family.father.occupation}`,
+            ),
+            mkRow(
+              roles.mother,
+              `${marathiContent.family.mother.name} · ${marathiContent.family.mother.occupation}`,
+            ),
+            mkRow(
+              roles.paternalUncle,
+              `${marathiContent.family.paternalUncle.name} · ${marathiContent.family.paternalUncle.occupation}`,
+            ),
+            mkRow(
+              roles.paternalAunt,
+              `${marathiContent.family.paternalAunt.name} · ${marathiContent.family.paternalAunt.occupation}`,
+            ),
+            mkRow(
+              roles.sister,
+              `${marathiContent.family.sister.name} · ${marathiContent.family.sister.occupation}`,
+            ),
+            mkRow(
+              roles.paternalGrandfather,
+              marathiContent.family.paternal.grandfather,
+            ),
+            mkRow(
+              roles.paternalGrandmother,
+              marathiContent.family.paternal.grandmother,
+            ),
+            mkRow(
+              roles.maternalGrandfather,
+              marathiContent.family.maternal.grandfather,
+            ),
+            mkRow(
+              roles.maternalGrandmother,
+              marathiContent.family.maternal.grandmother,
+            ),
           ].join("")
         : [
-            mkRow(roles.father, `${familyInfo.father.name} · ${occupationLabel(familyInfo.father.occupation)}`),
-            mkRow(roles.mother, `${familyInfo.mother.name} · ${occupationLabel(familyInfo.mother.occupation)}`),
+            mkRow(
+              roles.father,
+              `${familyInfo.father.name} · ${occupationLabel(familyInfo.father.occupation)}`,
+            ),
+            mkRow(
+              roles.mother,
+              `${familyInfo.mother.name} · ${occupationLabel(familyInfo.mother.occupation)}`,
+            ),
+            mkRow(
+              roles.paternalUncle,
+              `${familyInfo.paternalUncle.name} · ${occupationLabel(familyInfo.paternalUncle.occupation)}`,
+            ),
+            mkRow(
+              roles.paternalAunt,
+              `${familyInfo.paternalAunt.name} · ${occupationLabel(familyInfo.paternalAunt.occupation)}`,
+            ),
             ...familyInfo.siblings.map((sibling) =>
-              mkRow(roles.sister, `${sibling.name} · ${occupationLabel(sibling.occupation)}`)
+              mkRow(
+                roles.sister,
+                `${sibling.name} · ${occupationLabel(sibling.occupation)}`,
+              ),
             ),
             mkRow(roles.paternalGrandfather, familyInfo.paternal.grandfather),
             mkRow(roles.paternalGrandmother, familyInfo.paternal.grandmother),
@@ -246,13 +304,15 @@ export default function PDFDownload() {
           ].join("");
 
       const relativeRows = isMarathi
-        ? marathiContent.family.relativeItems.map((item) => mkRow("", item)).join("")
+        ? marathiContent.family.relativeItems
+            .map((item) => mkRow("", item))
+            .join("")
         : relativeInfoData
             .map(({ name, relation, occupation }) =>
               mkRow(
                 relativeLabel(relation),
-                `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`
-              )
+                `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
+              ),
             )
             .join("");
 
@@ -260,8 +320,8 @@ export default function PDFDownload() {
         .map((item) =>
           mkRow(
             item.year,
-            `${item.institution} · ${item.degree} · ${item.location}`
-          )
+            `${item.institution} · ${item.degree} · ${item.location}`,
+          ),
         )
         .join("");
 
@@ -269,14 +329,17 @@ export default function PDFDownload() {
         .map((job) =>
           mkRow(
             job.year,
-            `${job.company} · ${job.role} · ${job.location}${job.description ? ` · ${job.description}` : ""}`
-          )
+            `${job.company} · ${job.role} · ${job.location}${job.description ? ` · ${job.description}` : ""}`,
+          ),
         )
         .join("");
 
       const achievementRows = localizedAchievements
         .map((item) =>
-          mkRow(item.year, `${item.title} · ${item.fullTitle} · ${item.issuer}`)
+          mkRow(
+            item.year,
+            `${item.title} · ${item.fullTitle} · ${item.issuer}`,
+          ),
         )
         .join("");
 
@@ -301,7 +364,7 @@ export default function PDFDownload() {
             mkRow(s.currentCity, profile.currentCity),
             mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
             mkRow(s.rashi, profile.rashi),
-          ].join("")
+          ].join(""),
         ),
         mkSection(s.familyDetails, familyRows),
         mkSection(s.education, educationRows),
@@ -314,13 +377,16 @@ export default function PDFDownload() {
             mkRow(s.website, personalInfo.websiteUrl),
             mkRow(s.linkedin, personalInfo.linkedin),
             mkRow(s.address, profile.address),
-          ].join("")
+          ].join(""),
         ),
         mkSection(s.relativeDetails, relativeRows),
         mkSection(s.achievements, achievementRows),
         (() => {
           const horoscopeTable = [
-            mkRow(s.rashi, isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi),
+            mkRow(
+              s.rashi,
+              isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi,
+            ),
             mkRow(s.familyDeity, localizedHoroscope.familyDeity || "-"),
             mkRow(s.daivak, localizedHoroscope.daivak || "-"),
             mkRow(s.gotra, localizedHoroscope.gotra || "-"),
@@ -372,15 +438,16 @@ export default function PDFDownload() {
 
       await document.fonts.ready;
       await Promise.all(
-        Array.from(staging.querySelectorAll("img")).map(
-          (image) =>
-            image.complete
-              ? Promise.resolve()
-              : new Promise<void>((resolve) => {
-                  image.addEventListener("load", () => resolve(), { once: true });
-                  image.addEventListener("error", () => resolve(), { once: true });
-                })
-        )
+        Array.from(staging.querySelectorAll("img")).map((image) =>
+          image.complete
+            ? Promise.resolve()
+            : new Promise<void>((resolve) => {
+                image.addEventListener("load", () => resolve(), { once: true });
+                image.addEventListener("error", () => resolve(), {
+                  once: true,
+                });
+              }),
+        ),
       );
 
       const createPage = (withHeader: boolean) => {
@@ -396,17 +463,24 @@ export default function PDFDownload() {
       const addBlock = (block: Element) => {
         page.appendChild(block);
         const bottomLimit = page.getBoundingClientRect().bottom - 28;
-        const marginBottom = Number.parseFloat(getComputedStyle(block).marginBottom) || 0;
+        const marginBottom =
+          Number.parseFloat(getComputedStyle(block).marginBottom) || 0;
 
-        if (block.getBoundingClientRect().bottom + marginBottom <= bottomLimit) return;
+        if (block.getBoundingClientRect().bottom + marginBottom <= bottomLimit)
+          return;
 
         block.remove();
         page = createPage(false);
         page.appendChild(block);
 
         const pageBottomLimit = page.getBoundingClientRect().bottom - 28;
-        if (block.getBoundingClientRect().bottom + marginBottom > pageBottomLimit) {
-          throw new Error("A biodata section is too large to fit on one PDF page.");
+        if (
+          block.getBoundingClientRect().bottom + marginBottom >
+          pageBottomLimit
+        ) {
+          throw new Error(
+            "A biodata section is too large to fit on one PDF page.",
+          );
         }
       };
 
@@ -423,7 +497,7 @@ export default function PDFDownload() {
       const ph = doc.internal.pageSize.getHeight();
 
       for (const [index, pdfPage] of Array.from(
-        container.querySelectorAll<HTMLElement>(".pdf-page")
+        container.querySelectorAll<HTMLElement>(".pdf-page"),
       ).entries()) {
         const canvas = await html2canvas(pdfPage, {
           scale: 2,
