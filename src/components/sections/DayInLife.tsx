@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "../../context/LanguageContext";
-import { media } from "../../data/siteContent";
 import { marathiContent } from "../../data/marathiContent";
 
 export default function DayInLife() {
@@ -90,7 +89,7 @@ export default function DayInLife() {
               >
                 <div className="relative h-36 sm:h-40 rounded-2xl overflow-hidden mb-5">
                   <img
-                    src={media.dayInLifePhotos[i % media.dayInLifePhotos.length]}
+                      src={item.image}
                     alt=""
                     className="w-full h-full object-cover object-center"
                     loading="lazy"

@@ -494,6 +494,8 @@ export const dayInLifeData = [
     icon: "🏋️",
 
     color: "#EF4444",
+    image:
+      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -506,6 +508,8 @@ export const dayInLifeData = [
     icon: "🥗",
 
     color: "#10B981",
+    image:
+      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -518,6 +522,8 @@ export const dayInLifeData = [
     icon: "💻",
 
     color: "#3B82F6",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -530,6 +536,8 @@ export const dayInLifeData = [
     icon: "👥",
 
     color: "#8B5CF6",
+    image:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -542,6 +550,8 @@ export const dayInLifeData = [
     icon: "🌅",
 
     color: "#F59E0B",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -554,6 +564,8 @@ export const dayInLifeData = [
     icon: "👨‍👩‍👧",
 
     color: "#EC4899",
+    image:
+      "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -566,6 +578,8 @@ export const dayInLifeData = [
     icon: "📖",
 
     color: "#14B8A6",
+    image:
+      "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80",
   },
 
   {
@@ -579,6 +593,8 @@ export const dayInLifeData = [
     icon: "🌙",
 
     color: "#6366F1",
+    image:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
