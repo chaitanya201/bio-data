@@ -5,12 +5,12 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
   personalInfo,
-  familyInfo,
   educationData,
   careerData,
-  achievementsData,
   horoscopeData,
   relativeInfoData,
+  otherFamilyDetails,
+  otherFamilyDetailsMarathi,
 } from "../../data/siteContent";
 import { marathiContent } from "../../data/marathiContent";
 import { useLanguage } from "../../context/LanguageContext";
@@ -227,9 +227,6 @@ export default function PDFDownload() {
       const localizedCareer = isMarathi
         ? marathiContent.career.jobs
         : careerData;
-      const localizedAchievements = isMarathi
-        ? marathiContent.achievements
-        : achievementsData;
       const profile = isMarathi ? marathiContent.profile : personalInfo;
       const localizedHoroscope = isMarathi
         ? {
@@ -241,108 +238,52 @@ export default function PDFDownload() {
 
       const mkRow = (label: string, value: string) =>
         `<tr>
-          <td style="padding:10px 14px;color:#7A1F2B;font-size:11px;white-space:nowrap;width:168px;border-bottom:1px solid #E8DCC8;vertical-align:top;font-weight:700;letter-spacing:0.02em;background:#FBF7EF;">${escapeHtml(label)}</td>
-          <td style="padding:10px 14px;color:#3F3A35;font-size:12px;border-bottom:1px solid #E8DCC8;line-height:1.45;background:#FFFDF8;">${escapeHtml(value)}</td>
+          <td style="padding:7px 11px;color:#7A1F2B;font-size:10px;white-space:nowrap;width:150px;border-bottom:1px solid #E8DCC8;vertical-align:top;font-weight:700;letter-spacing:0.02em;background:#FBF7EF;">${escapeHtml(label)}</td>
+          <td style="padding:7px 11px;color:#3F3A35;font-size:11px;border-bottom:1px solid #E8DCC8;line-height:1.4;background:#FFFDF8;">${escapeHtml(value)}</td>
         </tr>`;
 
       const mkSection = (title: string, rows: string) =>
-        `<section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
-            <div style="width:28px;height:28px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800; padding-bottom:10px;">✦</div>
-            <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;">${escapeHtml(title)}</span>
+        `<section style="margin:0 22px 13px;break-inside:avoid;page-break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:10px;font-weight:800; padding-bottom:10px;">✦</div>
+            <span style="color:#7A1F2B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
           <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
             <table style="width:100%;border-collapse:collapse;">${rows}</table>
           </div>
         </section>`;
 
-      const familyRows = isMarathi
-        ? [
-            mkRow(
-              roles.father,
-              `${marathiContent.family.father.name} · ${marathiContent.family.father.occupation}`,
-            ),
-            mkRow(
-              roles.mother,
-              `${marathiContent.family.mother.name} · ${marathiContent.family.mother.occupation}`,
-            ),
-            mkRow(
-              roles.paternalUncle,
-              `${marathiContent.family.paternalUncle.name} · ${marathiContent.family.paternalUncle.occupation}`,
-            ),
-            mkRow(
-              roles.paternalAunt,
-              `${marathiContent.family.paternalAunt.name} · ${marathiContent.family.paternalAunt.occupation}`,
-            ),
-            mkRow(
-              roles.sister,
-              `${marathiContent.family.sister.name} · ${marathiContent.family.sister.occupation}`,
-            ),
-            mkRow(
-              roles.paternalGrandfather,
-              marathiContent.family.paternal.grandfather,
-            ),
-            mkRow(
-              roles.paternalGrandmother,
-              marathiContent.family.paternal.grandmother,
-            ),
-            mkRow(
-              roles.maternalGrandfather,
-              marathiContent.family.maternal.grandfather,
-            ),
-            mkRow(
-              roles.maternalGrandmother,
-              marathiContent.family.maternal.grandmother,
-            ),
-          ].join("")
-        : [
-            mkRow(
-              roles.father,
-              `${familyInfo.father.name} · ${occupationLabel(familyInfo.father.occupation)}`,
-            ),
-            mkRow(
-              roles.mother,
-              `${familyInfo.mother.name} · ${occupationLabel(familyInfo.mother.occupation)}`,
-            ),
-            mkRow(
-              roles.paternalUncle,
-              `${familyInfo.paternalUncle.name} · ${occupationLabel(familyInfo.paternalUncle.occupation)}`,
-            ),
-            mkRow(
-              roles.paternalAunt,
-              `${familyInfo.paternalAunt.name} · ${occupationLabel(familyInfo.paternalAunt.occupation)}`,
-            ),
-            ...familyInfo.siblings.map((sibling) =>
-              mkRow(
-                roles.sister,
-                `${sibling.name} · ${occupationLabel(sibling.occupation)}`,
-              ),
-            ),
-            mkRow(roles.paternalGrandfather, familyInfo.paternal.grandfather),
-            mkRow(roles.paternalGrandmother, familyInfo.paternal.grandmother),
-            mkRow(roles.maternalGrandfather, familyInfo.maternal.grandfather),
-            mkRow(roles.maternalGrandmother, familyInfo.maternal.grandmother),
-          ].join("");
+      const familyItems = isMarathi
+        ? marathiContent.family.relativeItems.map((item) => {
+            const [name, details = ""] = item.split(/\s*—\s*/, 2);
+            const [relation = "", occupation] = details.split(" · ", 2);
+            return {
+              relation,
+              name: `${name}${occupation ? ` · ${occupation}` : ""}`,
+            };
+          })
+        : relativeInfoData.map(({ name, relation, occupation }) => ({
+            relation: relativeLabel(relation),
+            name: `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
+          }));
 
-      const relativeRows = isMarathi
-        ? marathiContent.family.relativeItems
-            .map((item) => {
-              const [name, details = ""] = item.split(/\s*—\s*/, 2);
-              const [relation, occupation] = details.split(" · ", 2);
-              return mkRow(
-                relation,
-                `${name}${occupation ? ` · ${occupation}` : ""}`,
-              );
-            })
-            .join("")
-        : relativeInfoData
-            .map(({ name, relation, occupation }) =>
-              mkRow(
-                relativeLabel(relation),
-                `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
-              ),
-            )
-            .join("");
+      const familyCell = (item: (typeof familyItems)[number], isLeft: boolean) =>
+        `<td style="width:50%;padding:7px 10px;border-bottom:1px solid #E8DCC8;${isLeft ? "border-right:1px solid #E8DCC8;" : ""}vertical-align:middle;background:#FFFDF8;line-height:1.35;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="color:#7A1F2B;font-size:9px;font-weight:700;flex:0 0 auto;">${escapeHtml(item.relation)}</span>
+            <span style="color:#3F3A35;font-size:10px;">${escapeHtml(item.name)}</span>
+          </div>
+        </td>`;
+      const familyRows = Array.from(
+        { length: Math.ceil(familyItems.length / 2) },
+        (_, index) =>
+          `<tr>${familyCell(familyItems[index * 2], true)}${familyItems[index * 2 + 1] ? familyCell(familyItems[index * 2 + 1], false) : '<td style="width:50%;border-bottom:1px solid #E8DCC8;background:#FFFDF8;"></td>'}</tr>`,
+      ).join("");
+
+      const localizedOtherFamilyDetails = isMarathi
+        ? otherFamilyDetailsMarathi
+        : otherFamilyDetails;
+      const otherFamilyDetailsRows = `<tr><td colspan="2" style="padding:10px 14px;color:#3F3A35;font-size:12px;border-bottom:1px solid #E8DCC8;line-height:1.45;background:#FFFDF8;">${escapeHtml(localizedOtherFamilyDetails.join(", "))}</td></tr>`;
 
       const educationRows = localizedEducation
         .map((item) =>
@@ -362,22 +303,12 @@ export default function PDFDownload() {
         )
         .join("");
 
-      const achievementRows = localizedAchievements
-        .map((item) =>
-          mkRow(
-            item.year,
-            `${item.title} · ${item.fullTitle} · ${item.issuer}`,
-          ),
-        )
-        .join("");
-
-      const headerHtml = `<header style="position:relative;background:#FFFDF8;padding:30px 28px 24px;text-align:center;margin:0 18px 18px;border-radius:12px;box-shadow:0 5px 18px rgba(86,56,24,0.08);border:1px solid #D8C7A8;">
-            <div style="height:5px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:-30px -28px 22px;"></div>
-            <div style="font-size:29px;font-weight:800;color:#6F1D2A;margin-bottom:7px;letter-spacing:-0.4px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
-            <div style="font-size:13px;color:#66594B;margin-bottom:12px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
-            <div style="display:inline-block;background:#F7EEDC;padding:14px 12px;border-radius:999px;font-size:10px;color:#7A1F2B;letter-spacing:1.5px;text-transform:uppercase;border:1px solid #D8C7A8;font-weight:700;">${escapeHtml(s.marriageBiodata)}</div>
-            <div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8DCC8;font-size:10px;color:#8A7A69;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
-            <div style="height:2px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:18px 38px 0;"></div>
+      const headerHtml = `<header style="position:relative;background:#FFFDF8;padding:24px 24px 18px;text-align:center;margin:0 18px 12px;border-radius:12px;box-shadow:0 5px 18px rgba(86,56,24,0.08);border:1px solid #D8C7A8;">
+            <div style="height:4px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:-24px -24px 16px;"></div>
+            <div style="font-size:26px;font-weight:800;color:#6F1D2A;margin-bottom:5px;letter-spacing:-0.4px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
+            <div style="font-size:12px;color:#66594B;margin-bottom:9px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
+            <div style="display:inline-block;background:#F7EEDC;padding:9px 12px;border-radius:999px;font-size:9px;color:#7A1F2B;letter-spacing:1.3px;text-transform:uppercase;border:1px solid #D8C7A8;font-weight:700;">${escapeHtml(s.marriageBiodata)}</div>
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid #E8DCC8;font-size:9px;color:#8A7A69;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
           </header>`;
 
       const sectionsHtml = [
@@ -396,11 +327,11 @@ export default function PDFDownload() {
           ].join(""),
         ),
         mkSection(s.familyDetails, familyRows),
-        mkSection(s.relativeDetails, relativeRows),
-        mkSection(s.education, educationRows),
-        mkSection(s.career, careerRows),
-        mkSection(s.achievements, achievementRows),
-        (() => {
+        ...(localizedOtherFamilyDetails.length
+          ? [mkSection(s.otherFamilyDetails, otherFamilyDetailsRows)]
+          : []),
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:start;">${mkSection(s.education, educationRows)}${mkSection(s.career, careerRows)}</div>`,
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:start;">${(() => {
           const horoscopeTable = [
             mkRow(
               s.rashi,
@@ -414,19 +345,18 @@ export default function PDFDownload() {
           ].join("");
 
           return `
-            <section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
-                <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
+            <section style="margin:0 0 13px 22px;break-inside:avoid;page-break-inside:avoid;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:10px;font-weight:800; padding-bottom:10px;">✦</div>
+                <span style="color:#7A1F2B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
               </div>
               <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
                 <table style="width:100%;border-collapse:collapse;">${horoscopeTable}</table>
-                <div style="padding:12px 14px 14px;border-top:1px solid #E8DCC8;background:#FBF7EF;color:#4B433B;font-size:12px;line-height:1.6;">${escapeHtml(localizedHoroscope.summary || "")}</div>
+                <div style="padding:8px 10px 10px;border-top:1px solid #E8DCC8;background:#FBF7EF;color:#4B433B;font-size:10px;line-height:1.45;">${escapeHtml(localizedHoroscope.summary || "")}</div>
               </div>
             </section>
           `;
-        })(),
-        mkSection(
+        })()}${mkSection(
           s.contact,
           [
             mkRow(s.phone, personalInfo.phone),
@@ -435,7 +365,7 @@ export default function PDFDownload() {
             mkRow(s.linkedin, personalInfo.linkedin),
             mkRow(s.address, profile.address),
           ].join(""),
-        ),
+        )}</div>`,
         // `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
         //   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
         //     <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
@@ -478,7 +408,7 @@ export default function PDFDownload() {
       const createPage = (withHeader: boolean) => {
         const page = document.createElement("div");
         page.className = "pdf-page";
-        page.style.cssText = `box-sizing:border-box;width:${PAGE_WIDTH}px;height:${PAGE_HEIGHT}px;padding:28px 0;background:#F7F1E6;color:#3F3A35;font-family:${fontFamily};overflow:hidden;`;
+        page.style.cssText = `box-sizing:border-box;width:${PAGE_WIDTH}px;height:${PAGE_HEIGHT}px;padding:20px 0;background:#F7F1E6;color:#3F3A35;font-family:${fontFamily};overflow:hidden;`;
         if (withHeader) page.insertAdjacentHTML("beforeend", headerHtml);
         container?.appendChild(page);
         return page;

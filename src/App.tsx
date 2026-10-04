@@ -25,6 +25,7 @@ import MaharashtraMap from "./components/sections/MaharashtraMap";
 import DayInLife from "./components/sections/DayInLife";
 import FamilyTree from "./components/sections/FamilyTree";
 import RelativeInfo from "./components/sections/RelativeInfo";
+import OtherFamilyDetails from "./components/sections/OtherFamilyDetails";
 import GroomGallery from "./components/sections/GroomGallery";
 import HoroscopeCard from "./components/sections/HoroscopeCard";
 import LifePartner from "./components/sections/LifePartner";
@@ -67,6 +68,7 @@ function AppInner() {
             {/* <FamilyBackground /> */}
             <FamilyTree />
             <RelativeInfo />
+            <OtherFamilyDetails />
             <EducationJourney />
             <CareerJourney />
             {/* <Skills /> */}

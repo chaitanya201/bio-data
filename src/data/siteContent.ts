@@ -40,7 +40,7 @@ export const personalInfo = {
   photo:
     "https\://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
   familyDeity: "Kolhapur Jotiba",
-  daivak: "Greater Coucal (Bharadwaj Pakshi)",
+  daivak: "Kamal kalamb",
   gotra: "Durvasa Rushi",
 };
 
@@ -96,12 +96,31 @@ export const familyInfo = {
   },
 };
 
+export const otherFamilyDetails: string[] = [
+  "Pawar - (Bhavaninagar)",
+  "Sankapal - (Satevadi)",
+  "Mane Deshmukh - (Velapur)",
+  "Jaktap - (Vadapuri)",
+  "Zanzurne - (Ramwadi Jinti)",
+  "More - (Autewadi)",
+  "Nimbalkar - (dighi and Usmanabadh)",
+  "Shitole - (Patas)",
+  "Jaktap - (Pandhare)",
+];
+
+export const otherFamilyDetailsMarathi: string[] = [
+  "पवार - (भवानीनगर)",
+  "संकपाळ - (सातेवाडी)",
+  "माने देशमुख - (वेळापूर)",
+  "जक्ताप - (वडापुरी)",
+  "झांझुर्णे - (रामवाडी जिन्टी)",
+  "मोरे - (आऊटेवाडी)",
+  "निंबाळकर - (दिघी आणि उस्मानाबाद)",
+  "शितोळे - (पाटस)",
+  "जक्ताप - (पंधारे)",
+];
+
 export const relativeInfoData = [
-  {
-    name: familyInfo.father.name,
-    relation: familyInfo.father.relation,
-    occupation: familyInfo.father.occupation,
-  },
   {
     name: familyInfo.father.name,
     relation: familyInfo.father.relation,
@@ -1092,8 +1111,7 @@ export const en = {
 
     rashiChip: "Dhanu Rashi",
 
-    summary:
-      "Born under Dhanu Rashi with reverence for Kolhapur Jotiba as the family deity, the Greater Coucal (Bharadwaj Pakshi) daivak, and the Durvasa Rushi gotra—reflecting a grounded, spiritually rooted, and family-oriented nature.",
+    summary: `Born under ${personalInfo.rashi} Rashi with reverence for ${personalInfo.familyDeity} as the family deity, ${personalInfo.daivak}, and the ${personalInfo.gotra} gotra—reflecting a grounded, spiritually rooted, and family-oriented nature.`,
   },
 
   partner: {
@@ -1188,13 +1206,13 @@ export const en = {
 
       familyDetails: "Family Details",
 
+      otherFamilyDetails: "Other Family Details",
+
       education: "Education",
 
       career: "Career",
 
       contact: "Contact",
-
-      relativeDetails: "Family Circle",
 
       achievements: "Achievements",
 
@@ -1487,7 +1505,7 @@ export const mr: Translations = {
     tapReveal: "✦ सविस्तर सारांश पाहण्यासाठी टॅप करा ✦",
     rashiChip: "धनु राशी",
     summary:
-      "धनु राशीत जन्म, कोल्हापूर ज्योतिबा या कुलदैवतांचा आदर, महापक्षी (भरद्वाज पक्षी) दैवक आणि दुर्वासा ऋषी गोत्र — यावर आधारित संतुलित, आध्यात्मिक आणि कुटुंबाभिमुख स्वभाव.",
+      "धनु राशीत जन्म, कोल्हापूर ज्योतिबा या कुलदैवतांचा आदर, कमळ कळंब दैवक आणि दुर्वासा ऋषी गोत्र — यावर आधारित संतुलित, आध्यात्मिक आणि कुटुंबाभिमुख स्वभाव.",
   },
 
   partner: {
@@ -1504,11 +1522,11 @@ export const mr: Translations = {
     titleAccent: "माहिती",
     description: "जवळच्या कौटुंबिक नातेसंबंधांची आणि पार्श्वभूमीची साधी यादी.",
     items: [
-      "सुजित बापूसाहेब सावंत — वडील · शेतकरी",
-      "सुमित्रा सुजित सावंत — आई · गृहिणी",
+      "श्री. सुजित बापूसाहेब सावंत — वडील · शेतकरी",
+      "सौ. सुमित्रा सुजित सावंत — आई · गृहिणी",
       "सई सुजित  सुजित सावंत — बहीण · सॉफ्टवेअर अभियंता",
-      "बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
-      "रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
+      "श्री. बापूसाहेब गणेश सावंत — वडिलांकडील आजोबा",
+      "सौ. रंजना बापूसाहेब सावंत — वडिलांकडील आजी",
       "रामचंद्र रनवरे — आईकडील आजोबा",
       "वसुधा रनवरे — आईकडील आजी",
     ],
@@ -1556,10 +1574,10 @@ export const mr: Translations = {
     sections: {
       personalInfo: "वैयक्तिक माहिती",
       familyDetails: "कौटुंबिक तपशील",
+      otherFamilyDetails: "इतर कौटुंबिक तपशील",
       education: "शिक्षण",
       career: "करिअर",
       contact: "संपर्क",
-      relativeDetails: "कौटुंबिक परिवार",
       achievements: "उपलब्धी",
       horoscope: "कुंडली",
       timeOfBirth: "जन्मवेळ",
