@@ -1212,8 +1212,7 @@ export const en = {
 
       marriageBiodata: "Marriage Biodata",
 
-      footer:
-        "Designed with \u2764 for a new beginning \u00b7 Maharashtra, India",
+      footer: "",
 
       fullName: "Full Name",
       dateOfBirth: "Date of Birth",
@@ -1240,7 +1239,7 @@ export const en = {
   footer: {
     tagline: "Software Engineer · Encardio Rite",
 
-    credit: "Designed with  for a new beginning · Maharashtra, India · 2026",
+    credit: "",
   },
 };
 
@@ -1278,7 +1277,7 @@ export const mr: Translations = {
   hero: {
     badge: "विवाह बायोडाटा",
     greeting: "नमस्कार, मी आहे",
-    tagline: "सॉफ्टवेअर अभियंता · Encardio Rite",
+    tagline: "सॉफ्टवेअर Engineer · Encardio Rite",
     cta1: "माझी माहिती पहा",
     cta2: "संपर्क साधा",
     statAge: `${personalInfo.age} वर्षे`,
@@ -1395,14 +1394,12 @@ export const mr: Translations = {
       },
       {
         role: "वरिष्ठ सॉफ्टवेअर अभियंता",
-        description:
-          "क्लाउड-नेटिव्ह आर्किटेक्चर आणि ऑब्झर्व्हेबिलिटी प्लॅटफॉर्मवर SDE 2 म्हणून काम केले.",
+        description: "क्लाउड-नेटिव्ह आर्किटेक्चर SDE 2 म्हणून काम केले.",
         duration: "९ महिने",
       },
       {
         role: "वरिष्ठ सॉफ्टवेअर अभियंता",
-        description:
-          "क्लाउड-नेटिव्ह आर्किटेक्चर आणि ऑब्झर्व्हेबिलिटी प्लॅटफॉर्मवर SDE 2 म्हणून काम करत आहे.",
+        description: "क्लाउड-नेटिव्ह आर्किटेक्चर SDE 2 म्हणून काम करत आहे.",
         duration: "२+ वर्षे",
       },
     ],
@@ -1569,7 +1566,7 @@ export const mr: Translations = {
       placeOfBirth: "जन्मस्थळ",
       photos: "छायाचित्रे",
       marriageBiodata: "विवाह बायोडाटा",
-      footer: "महाराष्ट्र, भारत · नव्या सुरुवातीसाठी  ने बनवले",
+      footer: "",
       fullName: "पूर्ण नाव",
       dateOfBirth: "जन्मतारीख",
       age: "वय",
@@ -1593,8 +1590,8 @@ export const mr: Translations = {
   },
 
   footer: {
-    tagline: "सॉफ्टवेअर अभियंता · Encardio Rite",
-    credit: "नव्या सुरुवातीसाठी  ने बनवले · महाराष्ट्र, भारत · २०२६",
+    tagline: "सॉफ्टवेअर Engineer · Encardio Rite",
+    credit: "",
   },
 };
 

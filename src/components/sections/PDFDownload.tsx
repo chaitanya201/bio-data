@@ -181,7 +181,7 @@ export default function PDFDownload() {
           {
             Farmer: "शेतकरी",
             Homemaker: "गृहिणी",
-            "Software Engineer": "सॉफ्टवेअर अभियंता",
+            "Software Engineer": "सॉफ्टवेअर Engineer",
           }[occupation] ?? occupation
         );
       };
@@ -344,7 +344,6 @@ export default function PDFDownload() {
         .join("");
 
       const headerHtml = `<header style="background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 54%,#F59E0B 100%);padding:28px 28px 22px;text-align:center;margin:0 18px 18px;border-radius:22px;box-shadow:0 18px 38px rgba(37,99,235,0.22);border:1px solid rgba(255,255,255,0.08);">
-            <div style="display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.12);color:#FDE68A;font-size:20px;font-weight:800;margin-bottom:12px;border:1px solid rgba(255,255,255,0.18);">C</div>
             <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.6px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
             <div style="font-size:13px;color:#FDE68A;margin-bottom:12px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
             <div style="display:inline-block;background:rgba(15,23,42,0.32);padding:7px 18px;border-radius:999px;font-size:10px;color:#E0F2FE;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);">${escapeHtml(s.marriageBiodata)}</div>
@@ -407,18 +406,18 @@ export default function PDFDownload() {
             </section>
           `;
         })(),
-        `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
-            <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
-          </div>
-          <div style="display:flex;gap:16px;align-items:flex-start;">
-            <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
-              <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:420px;object-fit:cover;border-radius:12px;margin:0 auto;" />
-              <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
-            </div>
-          </div>
-        </section>`,
+        // `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
+        //   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        //     <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
+        //     <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+        //   </div>
+        //   <div style="display:flex;gap:16px;align-items:flex-start;">
+        //     <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
+        //       <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:420px;object-fit:cover;border-radius:12px;margin:0 auto;" />
+        //       <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
+        //     </div>
+        //   </div>
+        // </section>`,
         `<footer style="text-align:center;padding:14px 28px 24px;color:#D1D5DB;font-size:10px;letter-spacing:0.06em;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
       ];
 
