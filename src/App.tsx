@@ -61,7 +61,7 @@ function AppInner() {
           {/* Main content */}
           <main>
             {/* <Hero /> */}
-            <GroomGallery />
+            {/* <GroomGallery /> */}
             {/* <ThreeDIntro /> */}
             <PersonalInfo />
             {/* <FamilyBackground /> */}

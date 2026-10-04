@@ -1,11 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  MapPin,
-  Calendar,
-  Ruler,
-  Droplets,
-} from "lucide-react";
+import { MapPin, Calendar, Ruler, Droplets } from "lucide-react";
 import { personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 import { marathiContent } from "../../data/marathiContent";
@@ -250,7 +245,7 @@ export default function PersonalInfo() {
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6">
             {/* Photo */}
-            <div className="">
+            {/* <div className="">
               <div
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-amber-400/40"
                 style={{ boxShadow: "0 0 20px rgba(245,158,11,0.3)" }}
@@ -261,7 +256,7 @@ export default function PersonalInfo() {
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Identity */}
             <div className="flex-1 text-center sm:text-left">
@@ -320,10 +315,7 @@ export default function PersonalInfo() {
                 transition={{ duration: 0.5, delay: 0.45 }}
                 className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start"
               >
-                {[
-                  profile.religion,
-                  profile.caste,
-                ].map((v) => (
+                {[profile.religion, profile.caste].map((v) => (
                   <span
                     key={v}
                     className="px-3 py-1 rounded-full text-xs font-medium"
