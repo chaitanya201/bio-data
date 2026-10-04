@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Calendar, Ruler, Droplets } from "lucide-react";
-import { personalInfo } from "../../data/siteContent";
+import { getCurrentAge, personalInfo } from "../../data/siteContent";
 import { useLanguage } from "../../context/LanguageContext";
 import { marathiContent } from "../../data/marathiContent";
 
@@ -292,7 +292,7 @@ export default function PersonalInfo() {
                   { icon: MapPin, text: profile.currentCity },
                   {
                     icon: Calendar,
-                    text: `${profile.dateOfBirth} · ${isMarathi ? `${new Intl.NumberFormat("mr-IN").format(personalInfo.age)} वर्षे` : `${personalInfo.age} yrs`}`,
+                    text: `${profile.dateOfBirth} · ${isMarathi ? `${new Intl.NumberFormat("mr-IN").format(getCurrentAge())} वर्षे` : `${getCurrentAge()} yrs`}`,
                   },
                   { icon: Ruler, text: profile.height },
                   { icon: Droplets, text: profile.bloodGroup },

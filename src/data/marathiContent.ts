@@ -6,6 +6,7 @@ import {
   lifePartnerExpectations,
   lifeTimelineData,
   personalityData,
+  getCurrentAge,
 } from "./siteContent";
 
 /**
@@ -22,7 +23,7 @@ export const marathiContent = {
     shortName: "चैतन्य",
     tagline: "सॉफ्टवेअर Engineer · Encardio Rite",
     dateOfBirth: "५ जुलै २००१",
-    age: "२५",
+    age: new Intl.NumberFormat("mr-IN").format(getCurrentAge()),
     height: "६'१\"",
     bloodGroup: "O+",
     nativePlace: "अकलूज, महाराष्ट्र",

@@ -1,3 +1,16 @@
+const birthDate = new Date(2001, 6, 5);
+
+export const calculateAge = (dateOfBirth: Date, today = new Date()) => {
+  const birthdayHasPassed =
+    today.getMonth() > dateOfBirth.getMonth() ||
+    (today.getMonth() === dateOfBirth.getMonth() &&
+      today.getDate() >= dateOfBirth.getDate());
+
+  return today.getFullYear() - dateOfBirth.getFullYear() - (birthdayHasPassed ? 0 : 1);
+};
+
+export const getCurrentAge = () => calculateAge(birthDate);
+
 export const personalInfo = {
   fullName: "Chaitanya Sujit Sawant",
 
@@ -7,7 +20,7 @@ export const personalInfo = {
 
   dateOfBirth: "5 July 2001",
 
-  age: 25,
+  age: getCurrentAge(),
 
   height: "6'1\"",
 
@@ -788,7 +801,7 @@ export const en = {
 
     cta2: "Get In Touch",
 
-    statAge: `${personalInfo.age} yrs`,
+    statAge: `${getCurrentAge()} yrs`,
 
     statCity: "Pune",
 
@@ -1300,7 +1313,7 @@ export const mr: Translations = {
     tagline: "सॉफ्टवेअर Engineer · Encardio Rite",
     cta1: "माझी माहिती पहा",
     cta2: "संपर्क साधा",
-    statAge: `${personalInfo.age} वर्षे`,
+    statAge: `${getCurrentAge()} वर्षे`,
     statCity: "पुणे",
     statCareer: "३+ वर्षे",
     labelAge: "वय",

@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
   personalInfo,
+  getCurrentAge,
   educationData,
   careerData,
   horoscopeData,
@@ -317,7 +318,12 @@ export default function PDFDownload() {
           [
             mkRow(s.fullName, profile.fullName),
             mkRow(s.dateOfBirth, profile.dateOfBirth),
-            mkRow(s.age, String(profile.age)),
+            mkRow(
+              s.age,
+              new Intl.NumberFormat(isMarathi ? "mr-IN" : "en-IN").format(
+                getCurrentAge(),
+              ),
+            ),
             mkRow(s.height, profile.height),
             mkRow(s.bloodGroup, profile.bloodGroup),
             mkRow(s.nativePlace, profile.nativePlace),

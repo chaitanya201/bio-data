@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { personalInfo } from '../../data/siteContent';
+import { getCurrentAge, personalInfo } from '../../data/siteContent';
 import { useLanguage } from '../../context/LanguageContext';
 import { marathiContent } from '../../data/marathiContent';
 
@@ -89,7 +89,12 @@ export default function Hero() {
               className="flex flex-wrap gap-6 sm:gap-8 mt-8 sm:mt-12 justify-center lg:justify-start"
             >
               {[
-                { label: t.hero.labelAge, value: t.hero.statAge },
+                {
+                  label: t.hero.labelAge,
+                  value: isMarathi
+                    ? `${new Intl.NumberFormat("mr-IN").format(getCurrentAge())} वर्षे`
+                    : `${getCurrentAge()} yrs`,
+                },
                 { label: t.hero.labelCity, value: t.hero.statCity },
                 { label: t.hero.labelCareer, value: t.hero.statCareer },
               ].map(stat => (
