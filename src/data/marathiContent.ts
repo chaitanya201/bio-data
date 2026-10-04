@@ -7,6 +7,7 @@ import {
   lifeTimelineData,
   personalityData,
   getCurrentAge,
+  getBrideAge,
 } from "./siteContent";
 
 /**
@@ -18,6 +19,58 @@ const mrDigits = (value: string) =>
   value.replace(/[0-9]/g, (digit) => "०१२३४५६७८९"[Number(digit)]);
 
 export const marathiContent = {
+  brideProfile: {
+    fullName: "कु. सई सुजित सावंत",
+    shortName: "सई",
+    tagline: "सॉफ्टवेअर अभियंता · EY",
+    dateOfBirth: "१२ ऑगस्ट २००२",
+    age: new Intl.NumberFormat("mr-IN").format(getBrideAge()),
+    height: "५'५\"",
+    bloodGroup: "O+",
+    nativePlace: "अकलूज, महाराष्ट्र",
+    currentCity: "पुणे, महाराष्ट्र",
+    religion: "हिंदू",
+    caste: "९६ कोळी मराठा",
+    rashi: "कन्या",
+    currentRole: "सॉफ्टवेअर अभियंता",
+    currentEmployer: "EY",
+    linkedin: "https://www.linkedin.com/in/sayee-sawant-software-developer",
+    address: "आंबेगाव बुद्रुक, पुणे, महाराष्ट्र — ४११०४६",
+    familyDeity: "कोल्हापूर ज्योतिबा",
+    daivak: "कमळ कळंब",
+    gotra: "दुर्वासा ऋषी",
+  },
+
+  brideHoroscope: {
+    dob: "१२ ऑगस्ट २००२",
+    tob: "दुपारी १२:४५",
+    pob: "अकलूज, महाराष्ट्र, भारत",
+    rashi: "कन्या",
+    familyDeity: "कोल्हापूर ज्योतिबा",
+    daivak: "कमळ कळंब",
+    gotra: "दुर्वासा ऋषी",
+    summary: "",
+  },
+
+  brideEducation: [
+    {
+      year: "२०२५",
+      institution: "Vishwakarma University",
+      degree: "MCA",
+      location: "पुणे",
+    },
+  ],
+
+  brideCareer: [
+    {
+      year: "सध्या",
+      company: "EY",
+      role: "सॉफ्टवेअर अभियंता",
+      description: "",
+      location: "",
+    },
+  ],
+
   profile: {
     fullName: "चैतन्य सुजित सावंत",
     shortName: "चैतन्य",

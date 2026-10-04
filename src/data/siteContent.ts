@@ -109,6 +109,43 @@ export const familyInfo = {
   },
 };
 
+const brideDateOfBirth = new Date(2002, 7, 12);
+
+export const getBrideAge = () => calculateAge(brideDateOfBirth);
+
+export const brideProfile = {
+  ...personalInfo,
+  fullName: familyInfo.siblings[0].name,
+  shortName: "Sayee",
+  tagline: "Software Engineer · EY",
+  dateOfBirth: "12 August 2002",
+  age: getBrideAge(),
+  height: "5'5\"",
+  rashi: "Kanya",
+  currentEmployer: "EY",
+  currentRole: "Software Engineer",
+  linkedin: "https://www.linkedin.com/in/sayee-sawant-software-developer",
+};
+
+export const brideEducationData = [
+  {
+    year: "2025",
+    institution: "Vishwakarma University",
+    degree: "MCA",
+    location: "Pune",
+  },
+];
+
+export const brideCareerData = [
+  {
+    year: "Current",
+    company: "EY",
+    role: "Software Engineer",
+    description: "",
+    location: "",
+  },
+];
+
 export const otherFamilyDetails: string[] = [
   "Pawar - (Bhavaninagar)",
   "Sankapal - (Satevadi)",
@@ -1243,7 +1280,7 @@ export const en = {
 
       photos: "Photos",
 
-      marriageBiodata: "Marriage Biodata",
+      marriageBiodata: "Bride Biodata",
 
       footer: "",
 
@@ -1599,7 +1636,7 @@ export const mr: Translations = {
       gotra: "गोत्र",
       placeOfBirth: "जन्मस्थळ",
       photos: "छायाचित्रे",
-      marriageBiodata: "विवाह बायोडाटा",
+      marriageBiodata: "वधू बायोडाटा",
       footer: "",
       fullName: "पूर्ण नाव",
       dateOfBirth: "जन्मतारीख",

@@ -5,9 +5,10 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
   personalInfo,
-  getCurrentAge,
-  educationData,
-  careerData,
+  brideProfile,
+  getBrideAge,
+  brideEducationData,
+  brideCareerData,
   horoscopeData,
   relativeInfoData,
   otherFamilyDetails,
@@ -223,19 +224,24 @@ export default function PDFDownload() {
       };
 
       const localizedEducation = isMarathi
-        ? marathiContent.education
-        : educationData;
+        ? marathiContent.brideEducation
+        : brideEducationData;
       const localizedCareer = isMarathi
-        ? marathiContent.career.jobs
-        : careerData;
-      const profile = isMarathi ? marathiContent.profile : personalInfo;
+        ? marathiContent.brideCareer
+        : brideCareerData;
+      const profile = isMarathi ? marathiContent.brideProfile : brideProfile;
       const localizedHoroscope = isMarathi
         ? {
             ...horoscopeData,
-            ...marathiContent.horoscope,
-            rashi: marathiContent.profile.rashi,
+            ...marathiContent.brideHoroscope,
           }
-        : horoscopeData;
+        : {
+            ...horoscopeData,
+            dob: brideProfile.dateOfBirth,
+            tob: "12:45 PM",
+            rashi: brideProfile.rashi,
+            summary: "",
+          };
 
       const mkRow = (label: string, value: string) =>
         `<tr>
@@ -243,30 +249,40 @@ export default function PDFDownload() {
           <td style="padding:7px 11px;color:#3F3A35;font-size:11px;border-bottom:1px solid #E8DCC8;line-height:1.4;background:#FFFDF8;">${escapeHtml(value)}</td>
         </tr>`;
 
-      const mkSection = (title: string, rows: string) =>
-        `<section style="margin:0 22px 13px;break-inside:avoid;page-break-inside:avoid;">
+      const mkSection = (title: string, rows: string, equalHeight = false) =>
+        `<section style="${equalHeight ? "display:flex;flex-direction:column;align-self:stretch;" : ""}margin:0 22px 13px;break-inside:avoid;page-break-inside:avoid;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
             <div style="width:22px;height:22px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:10px;font-weight:800; padding-bottom:10px;">✦</div>
             <span style="color:#7A1F2B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
-          <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
+          <div style="${equalHeight ? "flex:1;" : ""}background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
             <table style="width:100%;border-collapse:collapse;">${rows}</table>
           </div>
         </section>`;
 
       const familyItems = isMarathi
-        ? marathiContent.family.relativeItems.map((item) => {
-            const [name, details = ""] = item.split(/\s*—\s*/, 2);
-            const [relation = "", occupation] = details.split(" · ", 2);
-            return {
-              relation,
-              name: `${name}${occupation ? ` · ${occupation}` : ""}`,
-            };
-          })
-        : relativeInfoData.map(({ name, relation, occupation }) => ({
-            relation: relativeLabel(relation),
-            name: `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
-          }));
+        ? [
+            ...marathiContent.family.relativeItems
+              .filter((item) => !item.includes("— बहीण"))
+              .map((item) => {
+                const [name, details = ""] = item.split(/\s*—\s*/, 2);
+                const [relation = "", occupation] = details.split(" · ", 2);
+                return {
+                  relation,
+                  name: `${name}${occupation ? ` · ${occupation}` : ""}`,
+                };
+              }),
+            { relation: "भाऊ", name: "चैतन्य सुजित सावंत" },
+          ]
+        : [
+            ...relativeInfoData
+              .filter(({ relation }) => relation !== "Sister")
+              .map(({ name, relation, occupation }) => ({
+                relation: relativeLabel(relation),
+                name: `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
+              })),
+            { relation: "Brother", name: personalInfo.fullName },
+          ];
 
       const familyCell = (item: (typeof familyItems)[number], isLeft: boolean) =>
         `<td style="width:50%;padding:7px 10px;border-bottom:1px solid #E8DCC8;${isLeft ? "border-right:1px solid #E8DCC8;" : ""}vertical-align:middle;background:#FFFDF8;line-height:1.35;">
@@ -286,92 +302,92 @@ export default function PDFDownload() {
         : otherFamilyDetails;
       const otherFamilyDetailsRows = `<tr><td colspan="2" style="padding:10px 14px;color:#3F3A35;font-size:12px;border-bottom:1px solid #E8DCC8;line-height:1.45;background:#FFFDF8;">${escapeHtml(localizedOtherFamilyDetails.join(", "))}</td></tr>`;
 
-      const educationRows = localizedEducation
-        .map((item) =>
-          mkRow(
-            item.year,
-            `${item.institution} · ${item.degree} · ${item.location}`,
-          ),
-        )
-        .join("");
-
-      const careerRows = localizedCareer
-        .map((job) =>
-          mkRow(
-            job.year,
-            `${job.company} · ${job.role} · ${job.location}${job.description ? ` · ${job.description}` : ""}`,
-          ),
-        )
-        .join("");
-
       const headerHtml = `<header style="position:relative;background:#FFFDF8;padding:24px 24px 18px;text-align:center;margin:0 18px 12px;border-radius:12px;box-shadow:0 5px 18px rgba(86,56,24,0.08);border:1px solid #D8C7A8;">
             <div style="height:4px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:-24px -24px 16px;"></div>
             <div style="font-size:26px;font-weight:800;color:#6F1D2A;margin-bottom:5px;letter-spacing:-0.4px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
             <div style="font-size:12px;color:#66594B;margin-bottom:9px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
             <div style="display:inline-block;background:#F7EEDC;padding:9px 12px;border-radius:999px;font-size:9px;color:#7A1F2B;letter-spacing:1.3px;text-transform:uppercase;border:1px solid #D8C7A8;font-weight:700;">${escapeHtml(s.marriageBiodata)}</div>
-            <div style="margin-top:10px;padding-top:8px;border-top:1px solid #E8DCC8;font-size:9px;color:#8A7A69;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
           </header>`;
 
-      const sectionsHtml = [
-        mkSection(
-          s.personalInfo,
-          [
-            mkRow(s.fullName, profile.fullName),
-            mkRow(s.dateOfBirth, profile.dateOfBirth),
-            mkRow(
-              s.age,
-              new Intl.NumberFormat(isMarathi ? "mr-IN" : "en-IN").format(
-                getCurrentAge(),
-              ),
+      const personalInfoSection = mkSection(
+        s.personalInfo,
+        [
+          mkRow(s.fullName, profile.fullName),
+          mkRow(s.dateOfBirth, profile.dateOfBirth),
+          mkRow(
+            s.age,
+            new Intl.NumberFormat(isMarathi ? "mr-IN" : "en-IN").format(
+              getBrideAge(),
             ),
-            mkRow(s.height, profile.height),
-            mkRow(s.bloodGroup, profile.bloodGroup),
-            mkRow(s.nativePlace, profile.nativePlace),
-            mkRow(s.currentCity, profile.currentCity),
-            mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
-            mkRow(s.rashi, profile.rashi),
-          ].join(""),
-        ),
-        mkSection(s.familyDetails, familyRows),
+          ),
+          mkRow(s.height, profile.height),
+          mkRow(s.bloodGroup, profile.bloodGroup),
+          mkRow(s.nativePlace, profile.nativePlace),
+          mkRow(s.currentCity, profile.currentCity),
+          mkRow(s.religion, `${profile.religion} · ${profile.caste}`),
+          mkRow(s.rashi, profile.rashi),
+          mkRow(
+            s.education,
+            localizedEducation
+              .map((item) =>
+                [item.degree, item.institution, item.location, item.year]
+                  .filter(Boolean)
+                  .join(" · "),
+              )
+              .join(", "),
+          ),
+          mkRow(
+            s.career,
+            localizedCareer
+              .map((job) =>
+                [job.role, job.company, job.year]
+                  .filter(Boolean)
+                  .join(" · "),
+              )
+              .join(", "),
+          ),
+        ].join(""),
+        true,
+      );
+
+      const horoscopeSection = (() => {
+        const horoscopeTable = [
+          mkRow(s.rashi, localizedHoroscope.rashi),
+          mkRow(s.familyDeity, localizedHoroscope.familyDeity || "-"),
+          mkRow(s.daivak, localizedHoroscope.daivak || "-"),
+          mkRow(s.gotra, localizedHoroscope.gotra || "-"),
+          mkRow(s.timeOfBirth, localizedHoroscope.tob),
+          mkRow(s.placeOfBirth, localizedHoroscope.pob),
+        ].join("");
+
+        return `
+          <section style="margin:0 0 13px 22px;break-inside:avoid;page-break-inside:avoid;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div style="width:22px;height:22px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:10px;font-weight:800; padding-bottom:10px;">✦</div>
+              <span style="color:#7A1F2B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
+            </div>
+            <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
+              <table style="width:100%;border-collapse:collapse;">${horoscopeTable}</table>
+              <div style="padding:8px 10px 10px;border-top:1px solid #E8DCC8;background:#FBF7EF;color:#4B433B;font-size:10px;line-height:1.45;">${escapeHtml(localizedHoroscope.summary || "")}</div>
+            </div>
+          </section>`;
+      })();
+
+      const contactSection = mkSection(
+        s.contact,
+        [
+          mkRow(s.phone, personalInfo.phone),
+          mkRow(s.linkedin, profile.linkedin),
+          mkRow(s.address, profile.address),
+        ].join(""),
+      );
+
+      const sectionsHtml = [
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:stretch;">${personalInfoSection}${mkSection(s.familyDetails, familyRows, true)}</div>`,
         ...(localizedOtherFamilyDetails.length
           ? [mkSection(s.otherFamilyDetails, otherFamilyDetailsRows)]
           : []),
-        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:start;">${mkSection(s.education, educationRows)}${mkSection(s.career, careerRows)}</div>`,
-        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:start;">${(() => {
-          const horoscopeTable = [
-            mkRow(
-              s.rashi,
-              isMarathi ? t.horoscope.rashiChip : localizedHoroscope.rashi,
-            ),
-            mkRow(s.familyDeity, localizedHoroscope.familyDeity || "-"),
-            mkRow(s.daivak, localizedHoroscope.daivak || "-"),
-            mkRow(s.gotra, localizedHoroscope.gotra || "-"),
-            mkRow(s.timeOfBirth, localizedHoroscope.tob),
-            mkRow(s.placeOfBirth, localizedHoroscope.pob),
-          ].join("");
-
-          return `
-            <section style="margin:0 0 13px 22px;break-inside:avoid;page-break-inside:avoid;">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                <div style="width:22px;height:22px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:10px;font-weight:800; padding-bottom:10px;">✦</div>
-                <span style="color:#7A1F2B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
-              </div>
-              <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
-                <table style="width:100%;border-collapse:collapse;">${horoscopeTable}</table>
-                <div style="padding:8px 10px 10px;border-top:1px solid #E8DCC8;background:#FBF7EF;color:#4B433B;font-size:10px;line-height:1.45;">${escapeHtml(localizedHoroscope.summary || "")}</div>
-              </div>
-            </section>
-          `;
-        })()}${mkSection(
-          s.contact,
-          [
-            mkRow(s.phone, personalInfo.phone),
-            mkRow(s.email, personalInfo.email),
-            mkRow(s.website, personalInfo.websiteUrl),
-            mkRow(s.linkedin, personalInfo.linkedin),
-            mkRow(s.address, profile.address),
-          ].join(""),
-        )}</div>`,
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-items:start;">${horoscopeSection}${contactSection}</div>`,
         // `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
         //   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
         //     <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
