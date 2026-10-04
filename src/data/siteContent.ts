@@ -27,7 +27,7 @@ export const personalInfo = {
 
   phone: "+91 9503688182",
 
-  linkedin: "linkedin.com/in/im-chaitanya-sawant",
+  linkedin: "https://www.linkedin.com/in/im-chaitanya-sawant/",
 
   address: "Ambegaon BK, Pune, Maharashtra — 411046",
 
@@ -374,7 +374,7 @@ export const achievementsData = [
 
     fullTitle: "Best Performance of the Year",
 
-    issuer: "ThoughtWorks",
+    issuer: "Livlong 365 Pvt Ltd",
 
     year: "2024",
 
@@ -1126,7 +1126,7 @@ export const en = {
 
     titleAccent: "Touch",
 
-    thankYou: "Thank You For Visiting My Profile 🙏",
+    thankYou: "Thank You For Visiting My Profile",
 
     labels: {
       phone: "Phone",
@@ -1176,6 +1176,8 @@ export const en = {
       "A professionally formatted PDF with personal details, family background, education, career, and contact information — perfect for traditional families.",
 
     btnDownload: "Download Biodata PDF",
+
+    btnPreview: "Preview PDF",
 
     btnDownloaded: "✓ Downloaded!",
 
@@ -1516,7 +1518,7 @@ export const mr: Translations = {
     badge: "संपर्क साधा",
     title: "संपर्क",
     titleAccent: "साधा",
-    thankYou: "माझी माहिती पाहिल्याबद्दल धन्यवाद 🙏",
+    thankYou: "माझी माहिती पाहिल्याबद्दल धन्यवाद",
     labels: {
       phone: "दूरध्वनी",
       email: "ईमेल",
@@ -1547,6 +1549,7 @@ export const mr: Translations = {
     cardDesc:
       "वैयक्तिक माहिती, कौटुंबिक पार्श्वभूमी, शिक्षण, करिअर आणि संपर्क तपशीलांसह व्यावसायिक PDF — पारंपरिक स्वरूपासाठी योग्य.",
     btnDownload: "बायोडाटा PDF डाउनलोड करा",
+    btnPreview: "PDF पूर्वावलोकन",
     btnDownloaded: "✓ डाउनलोड झाले!",
     privacy:
       "PDF तुमच्या ब्राउझरमध्येच तयार होते — कोणताही डेटा सर्व्हरला पाठवला जात नाही",

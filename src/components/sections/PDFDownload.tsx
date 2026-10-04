@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Download, FileText, Loader } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Download, Eye, FileText, Loader, X } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
@@ -11,7 +11,6 @@ import {
   achievementsData,
   horoscopeData,
   relativeInfoData,
-  media,
 } from "../../data/siteContent";
 import { marathiContent } from "../../data/marathiContent";
 import { useLanguage } from "../../context/LanguageContext";
@@ -124,7 +123,7 @@ function DownloadActionButton({
   return (
     <motion.button
       type="button"
-      onClick={onClick}
+      onClick={() => onClick()}
       disabled={generating}
       aria-busy={generating}
       whileHover={{ scale: 1.05 }}
@@ -135,12 +134,12 @@ function DownloadActionButton({
           ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
           : undefined
       }
-      className={`flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium shadow-lg shadow-amber-400/25 transition-all disabled:cursor-wait disabled:opacity-70 ${
-        floating ? "fixed bottom-6 right-4 z-50 sm:right-6" : "px-8"
+      className={`flex items-center justify-center gap-2 rounded-full py-3 text-sm font-medium shadow-lg shadow-amber-900/10 transition-all disabled:cursor-wait disabled:opacity-70 ${
+        floating ? "px-4 sm:px-6" : "px-8"
       }`}
       style={{
-        background: "linear-gradient(135deg, #F59E0B, #D97706)",
-        color: "#0B1120",
+        background: "linear-gradient(135deg, #8B1E2D, #A52A3A)",
+        color: "#FFFDF7",
       }}
     >
       {generating ? (
@@ -161,8 +160,30 @@ export default function PDFDownload() {
   const { t, isMarathi } = useLanguage();
   const [generating, setGenerating] = useState(false);
   const [done, setDone] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const canPreview = window.location.hostname.includes("localhost");
+  const closePreview = useCallback(() => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+  }, [previewUrl]);
 
-  const generatePDF = async () => {
+  useEffect(() => {
+    if (!previewUrl) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closePreview();
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [closePreview, previewUrl]);
+
+  const generatePDF = async (preview = false) => {
     setGenerating(true);
 
     let container: HTMLDivElement | null = null;
@@ -220,17 +241,17 @@ export default function PDFDownload() {
 
       const mkRow = (label: string, value: string) =>
         `<tr>
-          <td style="padding:10px 14px;color:#A5B4FC;font-size:11px;white-space:nowrap;width:168px;border-bottom:1px solid rgba(148,163,184,0.18);vertical-align:top;font-weight:600;letter-spacing:0.04em;">${escapeHtml(label)}</td>
-          <td style="padding:10px 14px;color:#E5E7EB;font-size:12px;border-bottom:1px solid rgba(148,163,184,0.18);line-height:1.45;">${escapeHtml(value)}</td>
+          <td style="padding:10px 14px;color:#7A1F2B;font-size:11px;white-space:nowrap;width:168px;border-bottom:1px solid #E8DCC8;vertical-align:top;font-weight:700;letter-spacing:0.02em;background:#FBF7EF;">${escapeHtml(label)}</td>
+          <td style="padding:10px 14px;color:#3F3A35;font-size:12px;border-bottom:1px solid #E8DCC8;line-height:1.45;background:#FFFDF8;">${escapeHtml(value)}</td>
         </tr>`;
 
       const mkSection = (title: string, rows: string) =>
         `<section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
-            <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(title)}</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800; padding-bottom:10px;">✦</div>
+            <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;">${escapeHtml(title)}</span>
           </div>
-          <div style="background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,41,59,0.84));border:1px solid rgba(245,158,11,0.2);border-radius:16px;overflow:hidden;box-shadow:0 12px 28px rgba(15,23,42,0.38);">
+          <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
             <table style="width:100%;border-collapse:collapse;">${rows}</table>
           </div>
         </section>`;
@@ -305,7 +326,14 @@ export default function PDFDownload() {
 
       const relativeRows = isMarathi
         ? marathiContent.family.relativeItems
-            .map((item) => mkRow("", item))
+            .map((item) => {
+              const [name, details = ""] = item.split(/\s*—\s*/, 2);
+              const [relation, occupation] = details.split(" · ", 2);
+              return mkRow(
+                relation,
+                `${name}${occupation ? ` · ${occupation}` : ""}`,
+              );
+            })
             .join("")
         : relativeInfoData
             .map(({ name, relation, occupation }) =>
@@ -343,11 +371,13 @@ export default function PDFDownload() {
         )
         .join("");
 
-      const headerHtml = `<header style="background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 54%,#F59E0B 100%);padding:28px 28px 22px;text-align:center;margin:0 18px 18px;border-radius:22px;box-shadow:0 18px 38px rgba(37,99,235,0.22);border:1px solid rgba(255,255,255,0.08);">
-            <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.6px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
-            <div style="font-size:13px;color:#FDE68A;margin-bottom:12px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
-            <div style="display:inline-block;background:rgba(15,23,42,0.32);padding:7px 18px;border-radius:999px;font-size:10px;color:#E0F2FE;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);">${escapeHtml(s.marriageBiodata)}</div>
-            <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.14);font-size:11px;color:#DBEAFE;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
+      const headerHtml = `<header style="position:relative;background:#FFFDF8;padding:30px 28px 24px;text-align:center;margin:0 18px 18px;border-radius:12px;box-shadow:0 5px 18px rgba(86,56,24,0.08);border:1px solid #D8C7A8;">
+            <div style="height:5px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:-30px -28px 22px;"></div>
+            <div style="font-size:29px;font-weight:800;color:#6F1D2A;margin-bottom:7px;letter-spacing:-0.4px;line-height:1.2;">${escapeHtml(profile.fullName)}</div>
+            <div style="font-size:13px;color:#66594B;margin-bottom:12px;font-weight:600;">${escapeHtml(profile.tagline)}</div>
+            <div style="display:inline-block;background:#F7EEDC;padding:14px 12px;border-radius:999px;font-size:10px;color:#7A1F2B;letter-spacing:1.5px;text-transform:uppercase;border:1px solid #D8C7A8;font-weight:700;">${escapeHtml(s.marriageBiodata)}</div>
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8DCC8;font-size:10px;color:#8A7A69;font-weight:600;">${escapeHtml(personalInfo.websiteUrl)}</div>
+            <div style="height:2px;background:linear-gradient(90deg,#8B1E2D,#C9A45C,#8B1E2D);margin:18px 38px 0;"></div>
           </header>`;
 
       const sectionsHtml = [
@@ -366,19 +396,9 @@ export default function PDFDownload() {
           ].join(""),
         ),
         mkSection(s.familyDetails, familyRows),
+        mkSection(s.relativeDetails, relativeRows),
         mkSection(s.education, educationRows),
         mkSection(s.career, careerRows),
-        mkSection(
-          s.contact,
-          [
-            mkRow(s.phone, personalInfo.phone),
-            mkRow(s.email, personalInfo.email),
-            mkRow(s.website, personalInfo.websiteUrl),
-            mkRow(s.linkedin, personalInfo.linkedin),
-            mkRow(s.address, profile.address),
-          ].join(""),
-        ),
-        mkSection(s.relativeDetails, relativeRows),
         mkSection(s.achievements, achievementRows),
         (() => {
           const horoscopeTable = [
@@ -396,29 +416,39 @@ export default function PDFDownload() {
           return `
             <section style="margin:0 28px 20px;break-inside:avoid;page-break-inside:avoid;">
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
-                <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
+                <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
+                <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.horoscope)}</span>
               </div>
-              <div style="background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(17,24,39,0.84));border:1px solid rgba(245,158,11,0.2);border-radius:16px;overflow:hidden;box-shadow:0 12px 28px rgba(15,23,42,0.38);">
+              <div style="background:#FFFDF8;border:1px solid #D8C7A8;border-radius:10px;overflow:hidden;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
                 <table style="width:100%;border-collapse:collapse;">${horoscopeTable}</table>
-                <div style="padding:12px 14px 14px;border-top:1px solid rgba(148,163,184,0.18);background:rgba(245,158,11,0.06);color:#F9FAFB;font-size:12px;line-height:1.6;">${escapeHtml(localizedHoroscope.summary || "")}</div>
+                <div style="padding:12px 14px 14px;border-top:1px solid #E8DCC8;background:#FBF7EF;color:#4B433B;font-size:12px;line-height:1.6;">${escapeHtml(localizedHoroscope.summary || "")}</div>
               </div>
             </section>
           `;
         })(),
+        mkSection(
+          s.contact,
+          [
+            mkRow(s.phone, personalInfo.phone),
+            mkRow(s.email, personalInfo.email),
+            mkRow(s.website, personalInfo.websiteUrl),
+            mkRow(s.linkedin, personalInfo.linkedin),
+            mkRow(s.address, profile.address),
+          ].join(""),
+        ),
         // `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
         //   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        //     <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;color:#0F172A;font-size:12px;font-weight:800;">✦</div>
-        //     <span style="color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+        //     <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
+        //     <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
         //   </div>
         //   <div style="display:flex;gap:16px;align-items:flex-start;">
-        //     <div style="flex:1;min-width:0;background:linear-gradient(135deg,rgba(15,23,42,0.8),rgba(30,41,59,0.78));border-radius:16px;padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 24px rgba(15,23,42,0.32);">
+        //     <div style="flex:1;min-width:0;background:#FFFDF8;border-radius:10px;padding:12px;text-align:center;border:1px solid #D8C7A8;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
         //       <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:420px;object-fit:cover;border-radius:12px;margin:0 auto;" />
-        //       <div style="color:#E2E8F0;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
+        //       <div style="color:#7A1F2B;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
         //     </div>
         //   </div>
         // </section>`,
-        `<footer style="text-align:center;padding:14px 28px 24px;color:#D1D5DB;font-size:10px;letter-spacing:0.06em;border-top:1px solid rgba(255,255,255,0.08);margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
+        `<footer style="text-align:center;padding:14px 28px 24px;color:#8A7A69;font-size:10px;letter-spacing:0.06em;border-top:1px solid #E8DCC8;margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
       ];
 
       container = document.createElement("div");
@@ -448,7 +478,7 @@ export default function PDFDownload() {
       const createPage = (withHeader: boolean) => {
         const page = document.createElement("div");
         page.className = "pdf-page";
-        page.style.cssText = `box-sizing:border-box;width:${PAGE_WIDTH}px;height:${PAGE_HEIGHT}px;padding:28px 0;background:#0B1120;color:white;font-family:${fontFamily};overflow:hidden;`;
+        page.style.cssText = `box-sizing:border-box;width:${PAGE_WIDTH}px;height:${PAGE_HEIGHT}px;padding:28px 0;background:#F7F1E6;color:#3F3A35;font-family:${fontFamily};overflow:hidden;`;
         if (withHeader) page.insertAdjacentHTML("beforeend", headerHtml);
         container?.appendChild(page);
         return page;
@@ -497,7 +527,7 @@ export default function PDFDownload() {
         const canvas = await html2canvas(pdfPage, {
           scale: 2,
           useCORS: true,
-          backgroundColor: "#0B1120",
+          backgroundColor: "#F7F1E6",
           logging: false,
         });
         const imgData = canvas.toDataURL("image/jpeg", 0.94);
@@ -507,9 +537,13 @@ export default function PDFDownload() {
         canvas.height = 0;
       }
 
-      doc.save(`${profile.shortName}_Biodata.pdf`);
-      setDone(true);
-      setTimeout(() => setDone(false), CONFETTI_DURATION_MS);
+      if (preview) {
+        setPreviewUrl(URL.createObjectURL(doc.output("blob")));
+      } else {
+        doc.save(`${profile.shortName}_Biodata.pdf`);
+        setDone(true);
+        setTimeout(() => setDone(false), CONFETTI_DURATION_MS);
+      }
     } finally {
       container?.remove();
       setGenerating(false);
@@ -519,14 +553,70 @@ export default function PDFDownload() {
   return (
     <section id="pdf" className="section-padding relative overflow-hidden">
       {done && <ConfettiCelebration />}
-      <DownloadActionButton
-        floating
-        generating={generating}
-        done={done}
-        label={t.pdf.btnDownload}
-        downloadedLabel={t.pdf.btnDownloaded}
-        onClick={generatePDF}
-      />
+      <AnimatePresence>
+        {previewUrl && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.pdf.btnPreview}
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) closePreview();
+            }}
+          >
+            <motion.div
+              className="flex h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-[#D8C7A8] bg-[#FFFDF8] shadow-2xl"
+              initial={{ y: 16, scale: 0.98 }}
+              animate={{ y: 0, scale: 1 }}
+              exit={{ y: 16, scale: 0.98 }}
+            >
+              <div className="flex items-center justify-between gap-4 border-b border-[#D8C7A8] px-4 py-3">
+                <h2 className="font-semibold text-[#5F1722]">
+                  {t.pdf.cardTitle}
+                </h2>
+                <button
+                  type="button"
+                  onClick={closePreview}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-[#5F1722] transition-colors hover:bg-[#F4E2B9]"
+                  aria-label={t.gallery.close}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <iframe
+                title={t.pdf.cardTitle}
+                src={previewUrl}
+                className="min-h-0 w-full flex-1 bg-white"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <div className="fixed bottom-6 right-3 z-50 flex items-center gap-2 sm:right-6 sm:gap-3">
+        <DownloadActionButton
+          floating
+          generating={generating}
+          done={done}
+          label={t.pdf.btnDownload}
+          downloadedLabel={t.pdf.btnDownloaded}
+          onClick={generatePDF}
+        />
+        {canPreview && (
+          <button
+            type="button"
+            onClick={() => generatePDF(true)}
+            disabled={generating}
+            aria-busy={generating}
+            className="flex items-center justify-center gap-2 rounded-full border border-[#8B1E2D] px-4 py-3 text-sm font-medium text-[#8B1E2D] shadow-lg shadow-amber-900/10 transition-colors hover:bg-[#F7EEDC] disabled:cursor-wait disabled:opacity-70 sm:px-6"
+          >
+            <Eye size={16} />
+            {t.pdf.btnPreview}
+          </button>
+        )}
+      </div>
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -535,32 +625,32 @@ export default function PDFDownload() {
           transition={{ duration: 0.7 }}
           className="text-center mb-8 md:mb-12"
         >
-          <span className="text-amber-400 text-sm tracking-widest uppercase font-medium">
+          <span className="text-[#8B1E2D] text-sm tracking-widest uppercase font-medium">
             {t.pdf.badge}
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-2">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#5F1722] mt-2">
             {t.pdf.title}{" "}
             <span className="text-gradient-gold">{t.pdf.titleAccent}</span>
           </h2>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-4" />
+          <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#C9A45C] to-transparent mx-auto mt-4" />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="glass rounded-3xl p-5 sm:p-8 text-center"
+          className="rounded-3xl p-5 sm:p-8 text-center bg-[#FFFDF8] border border-[#D8C7A8] shadow-[0_10px_30px_rgba(86,56,24,0.08)]"
         >
-          <FileText className="w-16 h-16 text-amber-400 mx-auto mb-4" />
+          <FileText className="w-16 h-16 text-[#8B1E2D] mx-auto mb-4" />
           <h3
-            className="text-white text-xl font-bold mb-2"
+            className="text-[#5F1722] text-xl font-bold mb-2"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             {t.pdf.cardTitle}
           </h3>
-          <p className="text-gray-300 mb-6">{t.pdf.cardDesc}</p>
+          <p className="text-[#66594B] mb-6">{t.pdf.cardDesc}</p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <DownloadActionButton
               onClick={generatePDF}
               generating={generating}
@@ -570,7 +660,7 @@ export default function PDFDownload() {
             />
           </div>
 
-          <p className="text-gray-500 text-xs mt-4">{t.pdf.privacy}</p>
+          <p className="text-[#8A7A69] text-xs mt-4">{t.pdf.privacy}</p>
         </motion.div>
       </div>
     </section>

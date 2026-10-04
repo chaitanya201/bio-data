@@ -15,7 +15,9 @@ import { marathiContent } from "../../data/marathiContent";
 
 export default function Contact() {
   const { t, isMarathi } = useLanguage();
-  const address = isMarathi ? marathiContent.profile.address : personalInfo.address;
+  const address = isMarathi
+    ? marathiContent.profile.address
+    : personalInfo.address;
   const [copied, setCopied] = useState<string | null>(null);
   const contacts = [
     {
@@ -36,7 +38,7 @@ export default function Contact() {
       icon: Link,
       label: t.contact.labels.linkedin,
       value: personalInfo.linkedin,
-      href: `https://${personalInfo.linkedin}`,
+      href: `${personalInfo.linkedin}`,
       color: "#0EA5E9",
     },
     {
@@ -142,7 +144,6 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="glass-gold rounded-3xl p-5 sm:p-8 text-center"
         >
-          <div className="text-5xl mb-4">🙏</div>
           <h3
             className="text-2xl font-bold text-white mb-3"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
