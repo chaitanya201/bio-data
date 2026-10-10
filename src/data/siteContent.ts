@@ -1,3 +1,8 @@
+import groomPhoto1 from "../assets/IMG-20261010-WA0304.jpg";
+import groomPhoto2 from "../assets/IMG-20261010-WA0305.jpg";
+import groomPhoto3 from "../assets/IMG-20261010-WA0306.jpg";
+import groomPhoto4 from "../assets/IMG-20261010-WA0307.jpg";
+
 const birthDate = new Date(2001, 6, 5);
 
 export const calculateAge = (dateOfBirth: Date, today = new Date()) => {
@@ -50,8 +55,7 @@ export const personalInfo = {
 
   currentEmployer: "Encardio Rite",
 
-  photo:
-    "https\://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+  photo: groomPhoto1,
   familyDeity: "Kolhapur Jotiba",
   daivak: "Kamal kalamb",
   gotra: "Durvasa Rushi",
@@ -746,9 +750,14 @@ export const horoscopeData = {
 };
 
 export const media = {
-  groomPhotos: [{ src: personalInfo.photo }],
+  groomPhotos: [
+    { src: groomPhoto1 },
+    { src: groomPhoto2 },
+    { src: groomPhoto3 },
+    { src: groomPhoto4 },
+  ],
 
-  dayInLifePhotos: [personalInfo.photo],
+  dayInLifePhotos: [groomPhoto1, groomPhoto2, groomPhoto3, groomPhoto4],
 
   pdfImages: {
     kundli: "/images/kundli-placeholder.jpg",

@@ -12,6 +12,7 @@ import {
   relativeInfoData,
   otherFamilyDetails,
   otherFamilyDetailsMarathi,
+  media,
 } from "../../data/siteContent";
 import { marathiContent } from "../../data/marathiContent";
 import { useLanguage } from "../../context/LanguageContext";
@@ -268,7 +269,10 @@ export default function PDFDownload() {
             name: `${name}${occupation ? ` · ${occupationLabel(occupation)}` : ""}`,
           }));
 
-      const familyCell = (item: (typeof familyItems)[number], isLeft: boolean) =>
+      const familyCell = (
+        item: (typeof familyItems)[number],
+        isLeft: boolean,
+      ) =>
         `<td style="width:50%;padding:7px 10px;border-bottom:1px solid #E8DCC8;${isLeft ? "border-right:1px solid #E8DCC8;" : ""}vertical-align:middle;background:#FFFDF8;line-height:1.35;">
           <div style="display:flex;align-items:center;gap:6px;">
             <span style="color:#7A1F2B;font-size:9px;font-weight:700;flex:0 0 auto;">${escapeHtml(item.relation)}</span>
@@ -372,18 +376,20 @@ export default function PDFDownload() {
             mkRow(s.address, profile.address),
           ].join(""),
         )}</div>`,
-        // `<section style="margin:0 28px 24px;break-inside:avoid;page-break-inside:avoid;">
-        //   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        //     <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
-        //     <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
-        //   </div>
-        //   <div style="display:flex;gap:16px;align-items:flex-start;">
-        //     <div style="flex:1;min-width:0;background:#FFFDF8;border-radius:10px;padding:12px;text-align:center;border:1px solid #D8C7A8;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
-        //       <img crossorigin="anonymous" src="${escapeHtml(media.groomPhotos[0].src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:100%;height:420px;object-fit:cover;border-radius:12px;margin:0 auto;" />
-        //       <div style="color:#7A1F2B;font-size:11px;font-weight:700;margin-top:10px;letter-spacing:0.08em;text-transform:uppercase;">${escapeHtml(s.groomPhoto)}</div>
-        //     </div>
-        //   </div>
-        // </section>`,
+        `<section style="margin:0 28px 12px;break-inside:avoid;page-break-inside:avoid;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#F4E2B9;border:1px solid #C9A45C;display:flex;align-items:center;justify-content:center;color:#8B1E2D;font-size:12px;font-weight:800;">✦</div>
+            <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
+          </div>
+        </section>`,
+        ...media.groomPhotos.map(
+          (photo) => `
+            <section style="margin:0 28px 16px;break-inside:avoid;page-break-inside:avoid;">
+              <div style="background:#FFFDF8;border-radius:10px;padding:8px;text-align:center;border:1px solid #D8C7A8;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
+                <img crossorigin="anonymous" src="${escapeHtml(photo.src)}" alt="${escapeHtml(s.groomPhoto)}" style="display:block;width:auto;height:auto;max-width:100%;max-height:1000px;object-fit:contain;border-radius:8px;margin:0 auto;background:#FBF7EF;" />
+              </div>
+            </section>`,
+        ),
         `<footer style="text-align:center;padding:14px 28px 24px;color:#8A7A69;font-size:10px;letter-spacing:0.06em;border-top:1px solid #E8DCC8;margin:0 28px;">${escapeHtml(s.footer)}</footer>`,
       ];
 

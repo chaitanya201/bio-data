@@ -42,7 +42,9 @@ export default function App() {
 }
 
 function AppInner() {
-  const [splashDone, setSplashDone] = useState(false);
+  const [splashDone, setSplashDone] = useState(
+    () => Boolean(localStorage.getItem("biodata-lang")),
+  );
   useLenis();
 
   return (
@@ -62,7 +64,7 @@ function AppInner() {
           {/* Main content */}
           <main>
             {/* <Hero /> */}
-            {/* <GroomGallery /> */}
+            <GroomGallery />
             {/* <ThreeDIntro /> */}
             <PersonalInfo />
             {/* <FamilyBackground /> */}
