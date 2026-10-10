@@ -382,7 +382,7 @@ export default function PDFDownload() {
             <span style="color:#7A1F2B;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">${escapeHtml(s.photos)}</span>
           </div>
         </section>`,
-        ...media.groomPhotos.map(
+        ...media.groomPhotos.slice(0, 2).map(
           (photo) => `
             <section style="margin:0 28px 16px;break-inside:avoid;page-break-inside:avoid;">
               <div style="background:#FFFDF8;border-radius:10px;padding:8px;text-align:center;border:1px solid #D8C7A8;box-shadow:0 3px 12px rgba(86,56,24,0.07);">
