@@ -1,7 +1,5 @@
 import groomPhoto1 from "../assets/IMG-20261010-WA0304.jpg";
-import groomPhoto2 from "../assets/IMG-20261010-WA0305.jpg";
-import groomPhoto3 from "../assets/IMG-20261010-WA0306.jpg";
-import groomPhoto4 from "../assets/IMG-20261010-WA0307.jpg";
+import groomPhoto2 from "../assets/IMG-20261010-WA0287.jpg";
 
 const birthDate = new Date(2001, 6, 5);
 
@@ -11,7 +9,11 @@ export const calculateAge = (dateOfBirth: Date, today = new Date()) => {
     (today.getMonth() === dateOfBirth.getMonth() &&
       today.getDate() >= dateOfBirth.getDate());
 
-  return today.getFullYear() - dateOfBirth.getFullYear() - (birthdayHasPassed ? 0 : 1);
+  return (
+    today.getFullYear() -
+    dateOfBirth.getFullYear() -
+    (birthdayHasPassed ? 0 : 1)
+  );
 };
 
 export const getCurrentAge = () => calculateAge(birthDate);
@@ -750,14 +752,9 @@ export const horoscopeData = {
 };
 
 export const media = {
-  groomPhotos: [
-    { src: groomPhoto1 },
-    { src: groomPhoto2 },
-    { src: groomPhoto3 },
-    { src: groomPhoto4 },
-  ],
+  groomPhotos: [{ src: groomPhoto1 }, { src: groomPhoto2 }],
 
-  dayInLifePhotos: [groomPhoto1, groomPhoto2, groomPhoto3, groomPhoto4],
+  dayInLifePhotos: [groomPhoto1, groomPhoto2],
 
   pdfImages: {
     kundli: "/images/kundli-placeholder.jpg",
