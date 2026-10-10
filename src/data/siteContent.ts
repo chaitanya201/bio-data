@@ -1,8 +1,7 @@
 import groomPhoto1 from "../assets/IMG-20261010-WA0311.jpg";
 import groomPhoto2 from "../assets/IMG-20261010-WA0287.jpg";
 import groomPhoto3 from "../assets/IMG-20261010-WA0305.jpg";
-import groomPhoto4 from "../assets/IMG-20261010-WA0306.jpg";
-import groomPhoto5 from "../assets/IMG-20261010-WA0307.jpg";
+import groomPhoto4 from "../assets/IMG-20261010-WA0307.jpg";
 
 const birthDate = new Date(2001, 6, 5);
 
@@ -760,7 +759,6 @@ export const media = {
     { src: groomPhoto2 },
     { src: groomPhoto3 },
     { src: groomPhoto4 },
-    { src: groomPhoto5 },
   ],
 
   dayInLifePhotos: [groomPhoto1, groomPhoto2],
